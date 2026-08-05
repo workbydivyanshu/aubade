@@ -6,8 +6,7 @@ use regex::Regex;
 
 static TIMESTAMP_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^\[(\d{1,3}):(\d{1,2})(?:[.:](\d{1,3}))?\]").unwrap());
-static METADATA_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^\[([a-zA-Z_]+):([^\]]*)\]").unwrap());
+static METADATA_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^\[([a-zA-Z_]+):([^\]]*)\]").unwrap());
 static WORD_TAG_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"<\d{1,3}:\d{1,2}(?:[.:]\d{1,3})?>").unwrap());
 
