@@ -88,6 +88,18 @@ template $AmberolWindow: Adw.ApplicationWindow {
                 [top]
                 Adw.HeaderBar {
                   show-title: false;
+
+                  [end]
+                  ToggleButton lyrics_button {
+                    icon-name: "format-justify-left-symbolic";
+                    tooltip-text: _("Show Lyrics");
+                    action-name: "lyrics.toggle";
+                    visible: false;
+
+                    accessibility {
+                      label: C_("a11y", "Show lyrics");
+                    }
+                  }
                 }
 
                 content: Box main_box {
@@ -100,7 +112,24 @@ template $AmberolWindow: Adw.ApplicationWindow {
                     "main-box",
                   ]
 
-                  $AmberolSongCover song_cover {}
+                  Stack cover_stack {
+                    transition-type: crossfade;
+
+                    StackPage {
+                      name: "cover";
+
+                      child: $AmberolSongCover song_cover {};
+                    }
+
+                    StackPage {
+                      name: "lyrics";
+
+                      child: $AmberolLyricsView lyrics_view {
+                        height-request: 280;
+                        width-request: 280;
+                      };
+                    }
+                  }
 
                   Box {
                     orientation: vertical;
