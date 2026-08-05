@@ -4,4 +4,4 @@
 pub mod loader;
 pub mod lrc;
 
-pub use lrc::{LyricLine, Lyrics};
+pub use lrc::Lyrics;
