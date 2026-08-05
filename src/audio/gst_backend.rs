@@ -23,7 +23,7 @@ pub struct GstReplayGain {
 }
 
 fn send_update_position(sender: &Sender<PlaybackAction>, clock: gst::ClockTime, notify: bool) {
-    let pos = clock.seconds();
+    let pos = clock.mseconds();
     if let Err(e) = sender.send_blocking(PlaybackAction::UpdatePosition(pos, notify)) {
         error!("Failed to send UpdatePosition({pos}): {e}");
     }
