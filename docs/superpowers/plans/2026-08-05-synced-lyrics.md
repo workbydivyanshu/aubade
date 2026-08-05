@@ -1333,9 +1333,26 @@ Run:
 timeout 20 env WAYLAND_DISPLAY= DISPLAY= meson devenv -C builddir ./src/amberol 2>&1 | head -8
 ```
 Expected: reaches `Setting up application (profile: development)` and then fails
-only with `Failed to open display`. Any panic before that line is a real bug —
-particularly a missing template child, which surfaces here rather than at
-compile time.
+only with `Failed to open display`.
+
+**This check is weaker than it looks.** The window is constructed only after a
+display connects, so this exercises resource loading and application setup but
+**not** template instantiation. A misnamed `#[template_child]` will not be caught
+here.
+
+Verify template children statically instead, by checking the generated XML
+contains the exact ids the Rust code binds to:
+
+```bash
+grep -oE 'id="[^"]*"' builddir/src/gtk/window.ui | sort -u | grep -E "cover_stack|lyrics"
+grep -oE 'id="[^"]*"' builddir/src/gtk/lyrics-view.ui | sort -u
+grep -oE 'class="AmberolLyricsView"' builddir/src/gtk/lyrics-view.ui
+```
+
+Expected: `cover_stack`, `lyrics_button`, `lyrics_view` from the first;
+`lines_box`, `scrolled_window` from the second; the class name from the third.
+Full template instantiation requires a display and is therefore part of the
+user's visual verification.
 
 - [ ] **Step 9: Run the full test suite**
 
