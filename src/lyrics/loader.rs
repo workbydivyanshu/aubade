@@ -85,16 +85,16 @@ pub fn load_from_sidecar(sidecar_path: &Path) -> Option<Lyrics> {
     }
 }
 
-/// Resolves and loads the sidecar lyrics for a song path.
-pub fn load_lyrics(song_path: &Path) -> Option<Lyrics> {
-    load_from_sidecar(&sidecar_path(song_path)?)
-}
-
 #[cfg(test)]
 mod tests {
     use std::fs;
 
     use super::*;
+
+    /// Resolve-then-load, for tests that exercise both halves together.
+    fn load_lyrics(song_path: &Path) -> Option<Lyrics> {
+        load_from_sidecar(&sidecar_path(song_path)?)
+    }
 
     fn scratch(tag: &str) -> PathBuf {
         let mut dir = std::env::temp_dir();

@@ -19,6 +19,8 @@ use crate::{
     config::APPLICATION_ID,
     drag_overlay::DragOverlay,
     i18n::{i18n, i18n_k, ni18n_f, ni18n_k},
+    lyrics::loader,
+    lyrics_view::LyricsView,
     playback_control::PlaybackControl,
     playlist_view::PlaylistView,
     queue_row::QueueRow,
@@ -59,6 +61,12 @@ mod imp {
         #[template_child]
         pub song_cover: TemplateChild<SongCover>,
         #[template_child]
+        pub cover_stack: TemplateChild<gtk::Stack>,
+        #[template_child]
+        pub lyrics_view: TemplateChild<LyricsView>,
+        #[template_child]
+        pub lyrics_button: TemplateChild<gtk::ToggleButton>,
+        #[template_child]
         pub song_details: TemplateChild<SongDetails>,
         #[template_child]
         pub waveform_view: TemplateChild<WaveformView>,
@@ -84,12 +92,14 @@ mod imp {
         pub playlist_visible: Cell<bool>,
         pub playlist_selection: Cell<bool>,
         pub playlist_search: Cell<bool>,
+        pub lyrics_visible: Cell<bool>,
         pub replaygain_mode: Cell<ReplayGainMode>,
 
         pub playlist_filtermodel: RefCell<Option<gio::ListModel>>,
 
         pub notify_playing_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_position_id: RefCell<Option<glib::SignalHandlerId>>,
+        pub notify_position_ms_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_song_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_cover_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_nsongs_id: RefCell<Option<glib::SignalHandlerId>>,
@@ -213,6 +223,7 @@ mod imp {
             klass.install_property_action("queue.shuffle", "playlist-shuffled");
             klass.install_property_action("queue.select", "playlist-selection");
             klass.install_property_action("queue.search", "playlist-search");
+            klass.install_property_action("lyrics.toggle", "lyrics-visible");
             klass.install_property_action("win.replaygain", "replaygain-mode");
 
             klass.install_action(
@@ -230,6 +241,7 @@ mod imp {
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
+            LyricsView::static_type();
             obj.init_template();
         }
 
@@ -237,6 +249,9 @@ mod imp {
             Self {
                 song_details: TemplateChild::default(),
                 song_cover: TemplateChild::default(),
+                cover_stack: TemplateChild::default(),
+                lyrics_view: TemplateChild::default(),
+                lyrics_button: TemplateChild::default(),
                 split_view: TemplateChild::default(),
                 toast_overlay: TemplateChild::default(),
                 drag_overlay: TemplateChild::default(),
@@ -253,12 +268,14 @@ mod imp {
                 playlist_visible: Cell::new(true),
                 playlist_selection: Cell::new(false),
                 playlist_search: Cell::new(false),
+                lyrics_visible: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
                 provider: gtk::CssProvider::new(),
                 settings: utils::settings_manager(),
                 notify_playing_id: RefCell::new(None),
                 notify_position_id: RefCell::new(None),
+                notify_position_ms_id: RefCell::new(None),
                 notify_song_id: RefCell::new(None),
                 notify_cover_id: RefCell::new(None),
                 notify_nsongs_id: RefCell::new(None),
@@ -284,6 +301,7 @@ mod imp {
                     ParamSpecBoolean::builder("playlist-visible").build(),
                     ParamSpecBoolean::builder("playlist-selection").build(),
                     ParamSpecBoolean::builder("playlist-search").build(),
+                    ParamSpecBoolean::builder("lyrics-visible").build(),
                     ParamSpecEnum::builder::<ReplayGainMode>("replaygain-mode").build(),
                 ]
             });
@@ -297,6 +315,7 @@ mod imp {
                 "playlist-visible" => obj.set_playlist_visible(value.get::<bool>().unwrap()),
                 "playlist-selection" => obj.set_playlist_selection(value.get::<bool>().unwrap()),
                 "playlist-search" => obj.set_playlist_search(value.get::<bool>().unwrap()),
+                "lyrics-visible" => obj.set_lyrics_visible(value.get::<bool>().unwrap()),
                 "replaygain-mode" => obj.set_replaygain(value.get::<ReplayGainMode>().unwrap()),
                 _ => unimplemented!(),
             }
@@ -309,6 +328,7 @@ mod imp {
                 "playlist-visible" => obj.playlist_visible().to_value(),
                 "playlist-selection" => obj.playlist_selection().to_value(),
                 "playlist-search" => obj.playlist_search().to_value(),
+                "lyrics-visible" => self.lyrics_visible.get().to_value(),
                 "replaygain-mode" => obj.replaygain().to_value(),
                 _ => unimplemented!(),
             }
@@ -434,6 +454,38 @@ impl Window {
         if visible != self.imp().playlist_visible.replace(visible) {
             self.imp().split_view.set_show_sidebar(visible);
             self.notify("playlist-visible");
+        }
+    }
+
+    fn set_lyrics_visible(&self, visible: bool) {
+        let imp = self.imp();
+        if visible != imp.lyrics_visible.replace(visible) {
+            if visible {
+                imp.cover_stack.set_visible_child_name("lyrics");
+            } else {
+                imp.cover_stack.set_visible_child_name("cover");
+            }
+            self.notify("lyrics-visible");
+        }
+    }
+
+    /// Loads the sidecar lyrics for the current song, and hides the toggle
+    /// entirely when there are none.
+    fn update_lyrics(&self) {
+        let imp = self.imp();
+
+        let lyrics = self
+            .player()
+            .and_then(|player| player.state().current_song())
+            .and_then(|song| song.lyrics_path())
+            .and_then(|path| loader::load_from_sidecar(&path));
+
+        let has_lyrics = lyrics.is_some();
+        imp.lyrics_view.set_lyrics(lyrics);
+        imp.lyrics_button.set_visible(has_lyrics);
+
+        if !has_lyrics {
+            self.set_lyrics_visible(false);
         }
     }
 
@@ -698,8 +750,23 @@ impl Window {
             );
             imp.notify_position_id.replace(Some(notify_position_id));
 
+            // Track the active lyrics line at millisecond precision
+            let notify_position_ms_id = state.connect_notify_local(
+                Some("position-ms"),
+                clone!(
+                    #[weak(rename_to = win)]
+                    self,
+                    move |state, _| {
+                        win.imp().lyrics_view.set_position_ms(state.position_ms());
+                    }
+                ),
+            );
+            imp.notify_position_ms_id
+                .replace(Some(notify_position_ms_id));
+
             // Update the UI
             self.update_song();
+            self.update_lyrics();
             let notify_song_id = state.connect_notify_local(
                 Some("song"),
                 clone!(
@@ -707,6 +774,7 @@ impl Window {
                     self,
                     move |_, _| {
                         win.update_song();
+                        win.update_lyrics();
                     }
                 ),
             );
@@ -758,6 +826,9 @@ impl Window {
                 state.disconnect(id);
             }
             if let Some(id) = self.imp().notify_position_id.take() {
+                state.disconnect(id);
+            }
+            if let Some(id) = self.imp().notify_position_ms_id.take() {
                 state.disconnect(id);
             }
             if let Some(id) = self.imp().notify_song_id.take() {
