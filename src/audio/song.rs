@@ -34,6 +34,7 @@ pub struct SongData {
     cover_uuid: Option<String>,
     uuid: Option<String>,
     duration: u64,
+    lyrics_path: Option<PathBuf>,
     file: gio::File,
 }
 
@@ -60,6 +61,10 @@ impl SongData {
 
     pub fn duration(&self) -> u64 {
         self.duration
+    }
+
+    pub fn lyrics_path(&self) -> Option<&PathBuf> {
+        self.lyrics_path.as_ref()
     }
 
     pub fn cover_texture(&self) -> Option<&gdk::Texture> {
@@ -181,6 +186,8 @@ impl SongData {
         let properties = lofty::prelude::AudioFile::properties(&tagged_file);
         let duration = properties.duration().as_secs();
 
+        let lyrics_path = crate::lyrics::loader::sidecar_path(&path);
+
         debug!(
             "Song {:?} ('{:?}') loading time: {} ms",
             &uuid,
@@ -196,6 +203,7 @@ impl SongData {
             cover_uuid,
             uuid,
             duration,
+            lyrics_path,
             file,
         }
     }
@@ -219,6 +227,7 @@ impl Default for SongData {
             cover_uuid: None,
             uuid: None,
             duration: 0,
+            lyrics_path: None,
             file: gio::File::for_path("/does-not-exist"),
         }
     }
@@ -254,6 +263,7 @@ mod imp {
                         .build(),
                     ParamSpecBoolean::builder("playing").build(),
                     ParamSpecBoolean::builder("selected").build(),
+                    ParamSpecBoolean::builder("has-lyrics").read_only().build(),
                 ]
             });
             PROPERTIES.as_ref()
@@ -270,6 +280,7 @@ mod imp {
                         obj.notify("album");
                         obj.notify("duration");
                         obj.notify("cover");
+                        obj.notify("has-lyrics");
                     }
                 }
                 "playing" => {
@@ -295,6 +306,7 @@ mod imp {
                 "cover" => obj.cover_texture().to_value(),
                 "playing" => self.playing.get().to_value(),
                 "selected" => self.selected.get().to_value(),
+                "has-lyrics" => obj.has_lyrics().to_value(),
                 _ => unimplemented!(),
             }
         }
@@ -374,6 +386,14 @@ impl Song {
 
     pub fn cover_cache(&self) -> Option<PathBuf> {
         self.imp().data.borrow().cover_cache().cloned()
+    }
+
+    pub fn lyrics_path(&self) -> Option<PathBuf> {
+        self.imp().data.borrow().lyrics_path().cloned()
+    }
+
+    pub fn has_lyrics(&self) -> bool {
+        self.imp().data.borrow().lyrics_path().is_some()
     }
 
     pub fn duration(&self) -> u64 {
