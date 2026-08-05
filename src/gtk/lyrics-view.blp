@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026
+
+using Gtk 4.0;
+
+template $AmberolLyricsView: Widget {
+  ScrolledWindow scrolled_window {
+    hscrollbar-policy: never;
+    vexpand: true;
+    hexpand: true;
+
+    child: Box lines_box {
+      orientation: vertical;
+      spacing: 6;
+      valign: start;
+      halign: center;
+      margin-top: 24;
+      margin-bottom: 24;
+      margin-start: 12;
+      margin-end: 12;
+    };
+  }
+}

@@ -8,6 +8,7 @@ mod cover_picture;
 mod drag_overlay;
 mod i18n;
 mod lyrics;
+mod lyrics_view;
 mod marquee;
 mod playback_control;
 mod playlist_view;
