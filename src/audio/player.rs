@@ -469,11 +469,17 @@ impl AudioPlayer {
         self.state.set_current_song(song);
     }
 
-    fn update_position(&self, position: u64, notify: bool) {
-        self.state.set_position(position);
+    fn update_position(&self, position_ms: u64, notify: bool) {
+        self.state.set_position_ms(position_ms);
 
-        for c in &self.controllers {
-            c.set_position(position, notify);
+        let seconds = position_ms / 1000;
+        let changed = self.state.position() != seconds;
+        self.state.set_position(seconds);
+
+        if changed || notify {
+            for c in &self.controllers {
+                c.set_position(seconds, notify);
+            }
         }
     }
 
