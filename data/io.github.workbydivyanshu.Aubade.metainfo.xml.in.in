@@ -3,12 +3,12 @@
   <id>@APPLICATION_ID@</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <name>Amberol</name>
+  <name>Aubade</name>
   <summary>Plays music, and nothing else</summary>
   <description>
     <p>
-      Amberol is a music player with no delusions of grandeur. If you just
-      want to play music available on your local system then Amberol is the
+      Aubade is a music player with no delusions of grandeur. If you just
+      want to play music available on your local system then Aubade is the
       music player you are looking for.
     </p>
     <p>Current features:</p>
@@ -24,29 +24,12 @@
     <color type="primary" scheme_preference="light">#90c0ff</color>
     <color type="primary" scheme_preference="dark">#003681</color>
   </branding>
-  <screenshots>
-    <screenshot type="default">
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-full.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-compact.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-playlist.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://www.bassi.io/~ebassi/amberol/screenshots/0.10/amberol-recolor.png</image>
-    </screenshot>
-  </screenshots>
   <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
-  <url type="homepage">https://gitlab.gnome.org/World/amberol</url>
-  <url type="bugtracker">https://gitlab.gnome.org/World/amberol/-/issues</url>
-  <url type="donation">https://ko-fi.com/emmanueleb</url>
-  <url type="contact">https://matrix.to/#/#amberol:gnome.org</url>
-  <url type="vcs-browser">https://gitlab.gnome.org/World/amberol</url>
-  <url type="translate">https://l10n.gnome.org/module/amberol/</url>
+  <url type="homepage">https://github.com/workbydivyanshu/aubade</url>
+  <url type="bugtracker">https://github.com/workbydivyanshu/aubade/issues</url>
+  <url type="vcs-browser">https://github.com/workbydivyanshu/aubade</url>
   <developer_name>Emmanuele Bassi</developer_name>
-  <developer id="io.bassi">
+  <developer id="io.github.workbydivyanshu">
     <name>Emmanuele Bassi</name>
   </developer>
   <update_contact>ebassi_at_gnome.org</update_contact>
@@ -96,7 +79,7 @@
     </release>
     <release version="2024.1" date="2024-09-21">
       <description>
-        <p>New versioning scheme! Amberol has switched to a year/release version.</p>
+        <p>New versioning scheme! Aubade has switched to a year/release version.</p>
         <p>With the new GNOME release, we are now taking advantage of the new libadwaita UI elements and features.</p>
         <p>If the song title, author, or album is too long, we now scroll their contents.</p>
         <ul>
@@ -182,7 +165,7 @@
         <ul>
           <li>Support fuzzy matching when searching inside the playlist</li>
           <li>Add a key shortcut for toggling shuffle</li>
-          <li>Allow opening folders with Amberol</li>
+          <li>Allow opening folders with Aubade</li>
           <li>Lots of translation updates</li>
           <li>Bug fixes and performance improvements</li>
         </ul>
@@ -197,11 +180,11 @@
       <description>
         <p>More features for less memory!</p>
         <ul>
-          <li>You can now search for songs in the playlist: just start typing and Amberol will display the matching songs. Search also works when selecting songs</li>
+          <li>You can now search for songs in the playlist: just start typing and Aubade will display the matching songs. Search also works when selecting songs</li>
           <li>Album art is shared across songs from the same album, saving memory</li>
-          <li>Amberol can now run in the background using the appropriate sandbox portal</li>
+          <li>Aubade can now run in the background using the appropriate sandbox portal</li>
           <li>The window size is restored across sessions</li>
-          <li>You can now build and run Amberol on macOS</li>
+          <li>You can now build and run Aubade on macOS</li>
           <li>Lots of bug fixes and UI improvements</li>
           <li>Lots of translation updates</li>
         </ul>
@@ -251,7 +234,7 @@
     </release>
     <release version="0.6.0" date="2022-05-06">
       <description>
-        <p>New round of UI touch-ups, to make Amberol more readable.</p>
+        <p>New round of UI touch-ups, to make Aubade more readable.</p>
         <ul>
           <li>Improve the playlist management through a selection mode switch</li>
           <li>Add localization for various languages</li>
@@ -271,7 +254,7 @@
           <li>Improve the rendering of the waveform</li>
           <li>Improve extraction of the song metadata</li>
         </ul>
-        <p>Thanks to everyone who tried Amberol and filed issues!</p>
+        <p>Thanks to everyone who tried Aubade and filed issues!</p>
       </description>
     </release>
     <release version="0.4.3" date="2022-04-27">
@@ -297,9 +280,9 @@
     </release>
     <release version="0.4.0" date="2022-04-22">
       <description>
-        <p>The first beta release for Amberol! Isn't this exciting?</p>
+        <p>The first beta release for Aubade! Isn't this exciting?</p>
         <ul>
-          <li>Show an initial page when launching Amberol</li>
+          <li>Show an initial page when launching Aubade</li>
           <li>Make the layout more mobile friendly without impacting desktop users</li>
           <li>Allow removing songs from the playlist</li>
           <li>Add initial (experimental) support for recursive loading of music folders</li>

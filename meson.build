@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022  Emmanuele Bassi
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-project('amberol', 'rust',
+project('aubade', 'rust',
   version: '2026.2',
   license: ['GPL-3.0'],
   meson_version: '>= 0.59.0',

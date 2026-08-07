@@ -1,5 +1,5 @@
 {
-    "app-id" : "io.bassi.Amberol.Devel",
+    "app-id" : "io.github.workbydivyanshu.Aubade.Devel",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
