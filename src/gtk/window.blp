@@ -4,7 +4,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $AmberolWindow: Adw.ApplicationWindow {
+template $AubadeWindow: Adw.ApplicationWindow {
   handle-menubar-accel: true;
   width-request: 360;
   height-request: 660;
@@ -35,7 +35,7 @@ template $AmberolWindow: Adw.ApplicationWindow {
                 child: Adw.StatusPage status_page {
                   margin-start: 12;
                   margin-end: 12;
-                  title: "Amberol";
+                  title: "Aubade";
                   description: _("Select a file or a folder, or drag files from your file manager to the application window to add songs to the playlist");
 
                   child: Box {
@@ -119,13 +119,13 @@ template $AmberolWindow: Adw.ApplicationWindow {
                     StackPage {
                       name: "cover";
 
-                      child: $AmberolSongCover song_cover {};
+                      child: $AubadeSongCover song_cover {};
                     }
 
                     StackPage {
                       name: "lyrics";
 
-                      child: $AmberolLyricsView lyrics_view {
+                      child: $AubadeLyricsView lyrics_view {
                         height-request: 280;
                         width-request: 280;
                       };
@@ -140,7 +140,7 @@ template $AmberolWindow: Adw.ApplicationWindow {
                     Box {
                       halign: center;
 
-                      $AmberolWaveformView waveform_view {
+                      $AubadeWaveformView waveform_view {
                         can-focus: "true";
                       }
                     }
@@ -180,9 +180,9 @@ template $AmberolWindow: Adw.ApplicationWindow {
                     }
                   }
 
-                  $AmberolSongDetails song_details {}
+                  $AubadeSongDetails song_details {}
 
-                  $AmberolPlaybackControl playback_control {
+                  $AubadePlaybackControl playback_control {
                     halign: "center";
                     margin-top: "0";
                     margin-bottom: "24";
@@ -190,7 +190,7 @@ template $AmberolWindow: Adw.ApplicationWindow {
                 };
               };
 
-              sidebar: $AmberolPlaylistView playlist_view {};
+              sidebar: $AubadePlaylistView playlist_view {};
             };
           }
         };

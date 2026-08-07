@@ -12,7 +12,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, CompositeTemplate)]
-    #[template(resource = "/io/bassi/Amberol/lyrics-view.ui")]
+    #[template(resource = "/io/github/workbydivyanshu/Aubade/lyrics-view.ui")]
     pub struct LyricsView {
         #[template_child]
         pub scrolled_window: TemplateChild<gtk::ScrolledWindow>,
@@ -26,7 +26,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for LyricsView {
-        const NAME: &'static str = "AmberolLyricsView";
+        const NAME: &'static str = "AubadeLyricsView";
         type Type = super::LyricsView;
         type ParentType = gtk::Widget;
 

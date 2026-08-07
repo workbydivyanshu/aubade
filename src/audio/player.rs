@@ -46,7 +46,7 @@ pub enum PlaybackState {
 }
 
 #[derive(Clone, Copy, Debug, glib::Enum, PartialEq, Default)]
-#[enum_type(name = "AmberolRepeatMode")]
+#[enum_type(name = "AubadeRepeatMode")]
 pub enum RepeatMode {
     #[default]
     Consecutive,
@@ -65,7 +65,7 @@ impl Display for RepeatMode {
 }
 
 #[derive(Clone, Copy, Debug, glib::Enum, PartialEq)]
-#[enum_type(name = "AmberolReplayGainMode")]
+#[enum_type(name = "AubadeReplayGainMode")]
 pub enum ReplayGainMode {
     #[enum_value(name = "album")]
     Album,
