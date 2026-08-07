@@ -1,84 +1,75 @@
-Amberol
-=======
+Aubade
+======
 
-![Application icon](./data/icons/hicolor/scalable/apps/io.bassi.Amberol.svg)
+![Application icon](./data/icons/hicolor/scalable/apps/io.github.workbydivyanshu.Aubade.svg)
 
-A small and simple sound and music player that is well integrated with GNOME.
+A local music player for GNOME, with time-synced lyrics.
 
-Amberol aspires to be as small, unintrusive, and simple as possible. It does
-not manage your music collection; it does not let you manage playlists, smart
-or otherwise; it does not let you edit the metadata for your songs; it does
-not show you lyrics for your songs, or the Wikipedia page for your bands.
+Aubade plays the music already on your disk. It does not stream, it does not
+manage a library, and it does not need an account. Point it at a folder and it
+plays.
 
-Amberol plays music, and nothing else.
+Features
+--------
 
-![Full UI](./data/screenshots/amberol-full.png)
-![Compact UI](./data/screenshots/amberol-compact.png)
+- **Time-synced lyrics.** Aubade reads sidecar `.lrc` files sitting next to your
+  audio and scrolls them in time with playback, highlighting the current line.
+  Songs without lyrics simply don't show the button.
+- Gapless playback with ReplayGain support
+- Waveform seeking
+- MPRIS integration, so media keys and desktop widgets work
+- Adaptive UI that works from a narrow column to a full window
 
-Flatpak builds
---------------
+Lyrics
+------
 
-The recommended way of installing Amberol is through Flatpak. If you don't have
-Flatpak installed, you can get it from [the Flatpak website](https://flatpak.org/setup).
+Place an `.lrc` file next to the audio file, sharing its name:
 
-You can install stable builds of Amberol from [Flathub](https://flathub.org)
-by using this command:
+    a-little-more-time.opus
+    a-little-more-time.lrc
 
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak install flathub io.bassi.Amberol
+Aubade also accepts `a-little-more-time.opus.lrc`, and matches the extension
+case-insensitively.
 
-<a href="https://flathub.org/apps/details/io.bassi.Amberol"><img src="https://flathub.org/api/badge?svg&locale=en" width="200"/></a>
+Standard LRC is supported: `[mm:ss.xx]` and `[mm:ss.xxx]` timestamps, repeated
+timestamps on a single line, `[offset:]` correction, and metadata tags. Enhanced
+LRC word-level tags are stripped and sync stays line-level. Files with no
+timestamps are treated as having no synced lyrics.
 
-Getting in touch
-----------------
+Building
+--------
 
-If you have questions about Amberol, you can join the [`#amberol:gnome.org`](https://matrix.to/#/#amberol:gnome.org)
-channel on Matrix, or use the [GNOME Discourse instance](https://discourse.gnome.org/c/applications/7).
+Aubade builds with meson and cargo:
 
-Contributing
-------------
+    meson setup builddir
+    ninja -C builddir
+    ninja -C builddir install
 
-Please, see the [contribution guide](./CONTRIBUTING.md) if you wish to report
-and issue, fix a bug, or implement a new feature.
+Build dependencies on Fedora:
 
-How to obtain debugging information
------------------------------------
+    sudo dnf install gtk4-devel libadwaita-devel gstreamer1-devel \
+        gstreamer1-plugins-base-devel gstreamer1-plugins-bad-free-devel \
+        blueprint-compiler cargo
 
-Run Amberol from your terminal using:
+To run a development build without installing it:
 
-    RUST_BACKTRACE=1 RUST_LOG=amberol=debug flatpak run io.bassi.Amberol
+    meson setup builddir -Dprofile=development
+    ninja -C builddir
+    meson devenv -C builddir ./src/debug/aubade
 
-to obtain a full debug log.
+The development profile uses the application id
+`io.github.workbydivyanshu.Aubade.Devel`, so it can be installed alongside a
+release build.
 
-Translations
-------------
+Debugging
+---------
 
-Amberol is translated on the [GNOME translation platform](https://l10n.gnome.org/module/amberol).
+    RUST_LOG=aubade=debug ./builddir/src/debug/aubade
 
-You should contact the coordinator of [the localization team for your language](https://l10n.gnome.org/teams/)
-if you have questions.
+License
+-------
 
-For more information, please see the [GNOME Translation Project Welcome page](https://welcome.gnome.org/team/translation/).
+Aubade is licensed under the GPL-3.0-or-later. See [LICENSES](./LICENSES).
 
-Code of conduct
----------------
-
-Amberol follows the GNOME project [Code of Conduct](./code-of-conduct.md). All
-communications in project spaces, such as the issue tracker or
-[Discourse](https://discourse.gnome.org) are expected to follow it.
-
-Why is it called "Amberol"?
----------------------------
-
-The name comes from the the [Blue Amberol
-Records](https://en.wikipedia.org/wiki/Blue_Amberol_Records), a type of cylinder
-records made of (blue) nitrocellulose, capable of playback durations of around
-four minutes, just about the length of the average song since 1990.
-
-Copyright and licensing
------------------------
-
-Copyright 2022  Emmanuele Bassi
-
-Amberol is released under the terms of the GNU General Public License, either
-version 3.0 or, at your option, any later version.
+Aubade is a fork of [Amberol](https://gitlab.gnome.org/World/amberol) by
+Emmanuele Bassi.
