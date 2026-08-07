@@ -481,6 +481,8 @@ impl Window {
             .and_then(|path| loader::load_from_sidecar(&path));
 
         let has_lyrics = lyrics.is_some();
+        debug!("Lyrics available for the current song: {}", has_lyrics);
+
         imp.lyrics_view.set_lyrics(lyrics);
         imp.lyrics_button.set_visible(has_lyrics);
 

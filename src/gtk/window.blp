@@ -91,9 +91,10 @@ template $AmberolWindow: Adw.ApplicationWindow {
 
                   [end]
                   ToggleButton lyrics_button {
-                    icon-name: "format-justify-left-symbolic";
+                    icon-name: "lyrics-symbolic";
                     tooltip-text: _("Show Lyrics");
                     action-name: "lyrics.toggle";
+                    valign: center;
                     visible: false;
 
                     accessibility {
