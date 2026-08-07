@@ -74,14 +74,28 @@ grep -rn "io.bassi" data/ || echo "clean"
 ```
 Expected: `clean`.
 
-- [ ] **Step 5: Verify meson still configures**
+- [ ] **Step 5: Update `application_id`**
+
+`data/icons/meson.build` does not hardcode the icon filenames — it derives them
+from `application_id` in the top-level `meson.build:48`. The renames in Steps 2
+and 3 therefore break configuration until this moves with them:
+
+```bash
+sed -i "s/application_id = 'io\.bassi\.Amberol@0@'/application_id = 'io.github.workbydivyanshu.Aubade@0@'/" meson.build
+grep -n "^application_id" meson.build
+```
+Expected: `application_id = 'io.github.workbydivyanshu.Aubade@0@'.format(profile)`.
+
+The `project()` name stays `amberol` for now; that belongs to Task 2.
+
+- [ ] **Step 6: Verify meson configures**
 
 ```bash
 rm -rf builddir && meson setup builddir -Dprofile=development 2>&1 | tail -5
 ```
-Expected: configuration succeeds. It will still reference the old project name — that is Task 2's job.
+Expected: configuration succeeds with no "File ... does not exist" error.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -366,7 +380,7 @@ Expected: `renders`. If `rsvg-convert` is unavailable, use
 `magick convert` instead. Read `/tmp/icon-check.png` and confirm it looks
 correct — an SVG that parses is not necessarily an SVG that looks right.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add data/icons/
