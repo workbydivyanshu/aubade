@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="amberol">
+<schemalist gettext-domain="aubade">
   <enum id="io.github.workbydivyanshu.Aubade.ReplayGainMode">
     <value nick="album" value="0"/>
     <value nick="track" value="1"/>

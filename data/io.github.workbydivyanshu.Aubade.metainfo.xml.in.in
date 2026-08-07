@@ -33,7 +33,7 @@
     <name>Emmanuele Bassi</name>
   </developer>
   <update_contact>ebassi_at_gnome.org</update_contact>
-  <translation type="gettext">amberol</translation>
+  <translation type="gettext">aubade</translation>
   <custom>
     <value key="Purism::form_factor">mobile</value>
   </custom>

@@ -1,4 +1,4 @@
-Releasing Amberol
+Releasing Aubade
 =================
 
 QA Plan
@@ -31,10 +31,10 @@ Checklist for a release.
   - [ ] **Fixed**: bug fixes, with reference
   - [ ] **Removed**: Removed features, settings, UI; **IMPORTANT**: anything
     inside this list requires a version bump
-- [ ] Update the [appdata](./data/io.bassi.Amberol.appdata.xml.in.in)
+- [ ] Update the [appdata](./data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in)
   - [ ] New `<release>` element
   - [ ] *Optional*: new screenshots
-- [ ] `git commit -m 'Release Amberol $VERSION'`
+- [ ] `git commit -m 'Release Aubade $VERSION'`
 - [ ] `git tag -s $VERSION` (use the change log entry)
 - [ ] Bump up the project version in [`meson.build`](./meson.build)
 - [ ] `git push origin HEAD && git push origin $VERSION`
@@ -42,7 +42,7 @@ Checklist for a release.
 Flathub
 -------
 
-- [ ] Update the `io.bassi.Amberol.json` manifest
+- [ ] Update the `io.github.workbydivyanshu.Aubade.json` manifest
   - [ ] Change the archive URL
   - [ ] Change the SHA256 checksum
 - [ ] `git push origin HEAD`

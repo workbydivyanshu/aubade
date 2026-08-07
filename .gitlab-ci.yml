@@ -14,10 +14,10 @@ stages:
 flatpak:
   extends: ".flatpak"
   variables:
-    APP_ID: "io.bassi.Amberol.Devel"
-    BUNDLE: "io.bassi.Amberol.Devel.flatpak"
-    FLATPAK_MODULE: "amberol"
-    MANIFEST_PATH: "io.bassi.Amberol.json"
+    APP_ID: "io.github.workbydivyanshu.Aubade.Devel"
+    BUNDLE: "io.github.workbydivyanshu.Aubade.Devel.flatpak"
+    FLATPAK_MODULE: "aubade"
+    MANIFEST_PATH: "io.github.workbydivyanshu.Aubade.json"
     RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
 
 rust-fmt:

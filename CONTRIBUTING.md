@@ -1,6 +1,6 @@
 # Contribution guidelines
 
-Thank you for considering contributing to the Amberol project!
+Thank you for considering contributing to the Aubade project!
 
 Following these guidelines helps to communicate that you respect the time of
 the developers managing and developing this free software project. In return,
@@ -9,7 +9,7 @@ changes, and helping you finalize your pull requests.
 
 There are many ways to contribute, from improving the documentation,
 submitting bug reports and feature requests, localizing the user interface, or
-writing code which can be incorporated into Amberol itself.
+writing code which can be incorporated into Aubade itself.
 
 The issue tracker is meant to be used for actionable issues only. Please,
 don't use the issue tracker for support questions. Feel free to use the
@@ -17,15 +17,15 @@ don't use the issue tracker for support questions. Feel free to use the
 
 ## How to report bugs
 
-Issues should only be reported [on the project page](https://gitlab.gnome.org/World/Amberol/issues/).
+Issues should only be reported [on the project page](https://github.com/workbydivyanshu/aubade/issues/).
 
 ### Bug reports
 
 If you're reporting a bug make sure to list:
 
- 0. which version of Amberol are you using?
+ 0. which version of Aubade are you using?
  0. which operating system are you using?
- 0. how did you install Amberol?
+ 0. how did you install Aubade?
  0. the necessary steps to reproduce the issue
  0. the expected outcome
  0. a description of the behavior; screenshots are also welcome
@@ -76,7 +76,7 @@ spending unnecessary effort.
 
 ### Prerequisites
 
-If you want to contribute to the Amberol project, you will need to have the
+If you want to contribute to the Aubade project, you will need to have the
 development tools appropriate for your operating system, including:
 
  - Python 3.x
@@ -87,17 +87,17 @@ development tools appropriate for your operating system, including:
 
 ### Dependencies
 
-You will also need the various dependencies needed to build Amberol from
+You will also need the various dependencies needed to build Aubade from
 source. You will find the compile time dependencies in the
 [`Cargo.toml`](./Cargo.toml) file, while the run time dependencies are listed
 in the [`meson.build`](./meson.build) file.
 
-You are strongly encouraged to use GNOME Builder to build and run Amberol,
+You are strongly encouraged to use GNOME Builder to build and run Aubade,
 as it knows how to download and build all the dependencies necessary.
 
 ### Getting started
 
-You should start by forking the Amberol repository from the GitLab web UI;
+You should start by forking the Aubade repository from the GitLab web UI;
 then you can select *Clone Repository* from GNOME Builder and use your
 fork's URL as the repository URL.
 
@@ -110,11 +110,11 @@ the repository manually; make sure to have an account on GNOME's GitLab
 instance, and that you have an SSH key associated to that account:
 
 ```sh
-$ git clone git@ssh.gitlab.gnome.org:yourusername/amberol.git
-$ cd amberol
+$ git clone git@ssh.gitlab.gnome.org:yourusername/aubade.git
+$ cd aubade
 ```
 
-To compile the Git version of Amberol on your system, you will need to
+To compile the Git version of Aubade on your system, you will need to
 configure your build using Meson:
 
 ```sh
@@ -125,40 +125,40 @@ $ meson compile -C _builddir
 Meson will search for all the required dependencies during the setup
 step, and will run Cargo in the compile step.
 
-You can run Amberol uninstalled by using the Meson devenv command:
+You can run Aubade uninstalled by using the Meson devenv command:
 
 ```sh
 $ meson devenv -C _builddir
-$ ./src/amberol
+$ ./src/aubade
 $ exit
 ```
 
 ----
 
-You can now switch to a new branch to work on Amberol:
+You can now switch to a new branch to work on Aubade:
 
 ```sh
 $ git switch -C your-branch
 ```
 
 Once you've finished working on the bug fix or feature, push the branch
-to your Git repository and open a new merge request, to let the Amberol
+to your Git repository and open a new merge request, to let the Aubade
 maintainers review your contribution.
 
-Remember that the Amberol is maintained by volunteers, so it might take a
+Remember that the Aubade is maintained by volunteers, so it might take a
 little while to get reviews or feedback. Don't be discouraged, and feel
-free to join the `#amberol:gnome.org` channel on Matrix for any issue you
+free to join the `#aubade:gnome.org` channel on Matrix for any issue you
 may find.
 
 ### Coding style
 
-Amberol uses the standard Rust coding style. You can use:
+Aubade uses the standard Rust coding style. You can use:
 
     cargo +nightly fmt --all
 
 To ensure that your contribution is following the expected format.
 
-Amberol has an additional set of checks available in the
+Aubade has an additional set of checks available in the
 [`checks.sh`](./build-aux/checks.sh) tool.
 
 ### Commit messages
@@ -202,7 +202,7 @@ Closes #1234
 ```plain
 Closes #1234
 Fixes #1234
-Closes: https://gitlab.gnome.org/World/amberol/-/issues/123
+Closes: https://gitlab.gnome.org/World/aubade/-/issues/123
 ```
 
  - If you have a merge request with multiple commits and none of them
