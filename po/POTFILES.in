@@ -1,6 +1,6 @@
-data/io.bassi.Amberol.desktop.in.in
-data/io.bassi.Amberol.gschema.xml
-data/io.bassi.Amberol.metainfo.xml.in.in
+data/io.github.workbydivyanshu.Aubade.desktop.in.in
+data/io.github.workbydivyanshu.Aubade.gschema.xml
+data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in
 src/gtk/playback-control.blp
 src/gtk/playlist-view.blp
 src/gtk/queue-row.blp

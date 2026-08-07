@@ -1,12 +1,12 @@
-# Bulgarian translation of amberol po-file.
+# Bulgarian translation of aubade po-file.
 # Copyright (C) 2024 twlvnn kraftwerk
-# This file is distributed under the same license as the amberol package.
+# This file is distributed under the same license as the aubade package.
 # twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"Project-Id-Version: aubade main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/aubade/-/issues/\n"
 "POT-Creation-Date: 2025-10-02 15:14+0000\n"
 "PO-Revision-Date: 2026-03-01 09:10+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
@@ -18,60 +18,60 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.8\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:2
-#: data/io.bassi.Amberol.metainfo.xml.in.in:6
-msgid "Amberol"
-msgstr "Amberol"
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:2
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:6
+msgid "Aubade"
+msgstr "Aubade"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:3
 msgid "Music Player"
 msgstr "Плеър за музика"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:11
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr "музика;устройство;медия;звук;аудио;списък;песни;изпълнение;music;player;media;audio;playlist;"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:7
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "Просто слушане на музика"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:9
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:9
 msgid ""
-"Amberol is a music player with no delusions of grandeur. If you just want to "
-"play music available on your local system then Amberol is the music player "
+"Aubade is a music player with no delusions of grandeur. If you just want to "
+"play music available on your local system then Aubade is the music player "
 "you are looking for."
 msgstr ""
-"„Amberol“ е музикален плеър, което не се преструва на велик. Ако просто "
-"искате да слушате музика от локалната ви система, тогава „Amberol“ е "
+"„Aubade“ е музикален плеър, което не се преструва на велик. Ако просто "
+"искате да слушате музика от локалната ви система, тогава „Aubade“ е "
 "музикалното програма, която търсите."
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:14
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:14
 msgid "Current features:"
 msgstr "Функции:"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:16
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:16
 msgid "adaptive UI"
 msgstr "адаптивен потребителски интерфейс"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:17
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:17
 msgid "UI recoloring using the album art"
 msgstr ""
 "преоцветяване на потребителския интерфейс с помощта на обложката на албума"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:18
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:18
 msgid "drag and drop support to queue songs"
 msgstr "изтегляне и пускане в опашката с песни"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:19
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "разбъркване и повтаряне"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:20
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "Интеграция с MPRIS"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:48
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -190,8 +190,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "_Клавишни комбинации"
 
 #: src/gtk/playback-control.blp:222
-msgid "_About Amberol"
-msgstr "_Относно „Amberol“"
+msgid "_About Aubade"
+msgstr "_Относно „Aubade“"
 
 #: src/gtk/playback-control.blp:227
 msgid "_Quit"
@@ -376,8 +376,8 @@ msgstr ""
 "Докладвайте за грешки в превода в <a href='https://fsa-bg.org/project/gtp/newticket'>съответния раздел</a>."
 
 #: src/application.rs:255
-msgid "Amberol needs to run in the background to play music"
-msgstr "„Amberol“ трябва да работи във фонов режим, за да възпроизвежда музика"
+msgid "Aubade needs to run in the background to play music"
+msgstr "„Aubade“ трябва да работи във фонов режим, за да възпроизвежда музика"
 
 #: src/audio/inhibit_controller.rs:40
 msgid "Playback in progress"
