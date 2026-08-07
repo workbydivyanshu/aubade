@@ -1,12 +1,12 @@
-# Friulian translation for amberol.
-# Copyright (C) 2023 amberol's COPYRIGHT HOLDER
-# This file is distributed under the same license as the amberol package.
+# Friulian translation for aubade.
+# Copyright (C) 2023 aubade's COPYRIGHT HOLDER
+# This file is distributed under the same license as the aubade package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/issues\n"
+"Project-Id-Version: aubade main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/aubade/issues\n"
 "POT-Creation-Date: 2023-11-27 13:06+0000\n"
 "PO-Revision-Date: 2024-01-09 12:27+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
@@ -19,59 +19,59 @@ msgstr ""
 "X-Editor: HaiPO 1.4 beta\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
-#: data/io.bassi.Amberol.appdata.xml.in.in:6
-msgid "Amberol"
-msgstr "Amberol"
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:3
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:6
+msgid "Aubade"
+msgstr "Aubade"
 
-#: data/io.bassi.Amberol.desktop.in.in:4
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:4
 msgid "Music Player"
 msgstr "Riprodutôr musicâl"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:12
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:12
 msgid "music;player;media;audio;playlist;"
 msgstr "musiche;riprodutôr;multimedia;audio;liste di riproduzion;"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:7
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "Al riprodûs musiche e nuie altri"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:9
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:9
 msgid ""
-"Amberol is a music player with no delusions of grandeur. If you just want to "
-"play music available on your local system then Amberol is the music player "
+"Aubade is a music player with no delusions of grandeur. If you just want to "
+"play music available on your local system then Aubade is the music player "
 "you are looking for."
 msgstr ""
-"Amberol al è un riprodutôr musicâl cence delusions di grandece. Se tu "
-"desideris dome scoltâ la musiche disponibile sul to sisteme locâl, Amberol "
+"Aubade al è un riprodutôr musicâl cence delusions di grandece. Se tu "
+"desideris dome scoltâ la musiche disponibile sul to sisteme locâl, Aubade "
 "al è il riprodutôr musicâl che tu stâs cirint."
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:14
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:14
 msgid "Current features:"
 msgstr "Funzionalitâts corintis:"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:16
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:16
 msgid "adaptive UI"
 msgstr "IU adative"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:17
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:17
 msgid "UI recoloring using the album art"
 msgstr "La interface si torne a colorâ doprant la grafiche dal album"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:18
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:18
 msgid "drag and drop support to queue songs"
 msgstr "supuart pal strissinâ e molâ par meti in code lis cjançons"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:19
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "messede e ripet"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:20
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "Integrazion MPRIS"
 
-#: data/io.bassi.Amberol.appdata.xml.in.in:44
+#: data/io.github.workbydivyanshu.Aubade.appdata.xml.in.in:44
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -287,8 +287,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "Scurtis di _tastiere"
 
 #: src/gtk/playback-control.ui:205
-msgid "_About Amberol"
-msgstr "_Informazions su Amberol"
+msgid "_About Aubade"
+msgstr "_Informazions su Aubade"
 
 #: src/gtk/playback-control.ui:209
 msgid "_Quit"
@@ -359,8 +359,8 @@ msgid "translator-credits"
 msgstr "Fabio Tomat <f.t.public@gmail.com>"
 
 #: src/application.rs:241
-msgid "Amberol needs to run in the background to play music"
-msgstr "Par riprodusi musiche Amberol al scugne zirâ in sotfont"
+msgid "Aubade needs to run in the background to play music"
+msgstr "Par riprodusi musiche Aubade al scugne zirâ in sotfont"
 
 #: src/playback_control.rs:118
 msgid "Repeat All Songs"

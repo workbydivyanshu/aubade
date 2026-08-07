@@ -1,13 +1,13 @@
-# Vietnamese translation for amberol.
-# Copyright (C) 2025 amberol's COPYRIGHT HOLDER
-# This file is distributed under the same license as the amberol package.
+# Vietnamese translation for aubade.
+# Copyright (C) 2025 aubade's COPYRIGHT HOLDER
+# This file is distributed under the same license as the aubade package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Nguyễn Tri Phương <triphuong@falcolabs.org>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: amberol main\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"Project-Id-Version: aubade main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/aubade/-/issues/\n"
 "POT-Creation-Date: 2025-08-10 13:18+0000\n"
 "PO-Revision-Date: 2025-08-10 22:55+0700\n"
 "Last-Translator: Nguyễn Tri Phương <triphuong@falcolabs.org>\n"
@@ -18,67 +18,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-DL-Lang: vi\n"
-"X-DL-Module: amberol\n"
+"X-DL-Module: aubade\n"
 "X-DL-Branch: main\n"
 "X-DL-Domain: po\n"
 "X-DL-State: None\n"
 "X-Generator: Gtranslator 48.0\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:2
-#: data/io.bassi.Amberol.metainfo.xml.in.in:6
-msgid "Amberol"
-msgstr "Amberol"
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:2
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:6
+msgid "Aubade"
+msgstr "Aubade"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:3
 msgid "Music Player"
 msgstr "Trình phát nhạc"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:11
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr ""
 "music;player;media;audio;playlist;nhạc;phát;chơi;chạy;âm thanh;danh sách "
 "phát;nghe;"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:7
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "Một phần mềm không làm gì khác ngoài chơi nhạc"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:9
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:9
 msgid ""
-"Amberol is a music player with no delusions of grandeur. If you just want to "
-"play music available on your local system then Amberol is the music player "
+"Aubade is a music player with no delusions of grandeur. If you just want to "
+"play music available on your local system then Aubade is the music player "
 "you are looking for."
 msgstr ""
-"Amberol là một trình phát nhạc không khoe vẽ lung tung. Nếu như bạn cần một "
-"trình phát nhạc chạy cục bộ trên máy bạn, thì Amberol chính là thứ bạn đang "
+"Aubade là một trình phát nhạc không khoe vẽ lung tung. Nếu như bạn cần một "
+"trình phát nhạc chạy cục bộ trên máy bạn, thì Aubade chính là thứ bạn đang "
 "cần tìm."
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:14
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:14
 msgid "Current features:"
 msgstr "Tính năng:"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:16
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:16
 msgid "adaptive UI"
 msgstr "giao diện người dùng thích ứng"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:17
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:17
 msgid "UI recoloring using the album art"
 msgstr "giao diện đổi màu theo ảnh bìa album"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:18
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:18
 msgid "drag and drop support to queue songs"
 msgstr "kéo-thả để thêm bài hát vào danh sách chờ"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:19
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "đảo, trộn, và lặp bài"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:20
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "tích hợp MPRIS"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:48
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "Emmanuele Bassi"
 
@@ -298,8 +298,8 @@ msgid "_Keyboard Shortcuts"
 msgstr "_Phím tắt"
 
 #: src/gtk/playback-control.ui:209
-msgid "_About Amberol"
-msgstr "_Về Amberol"
+msgid "_About Aubade"
+msgstr "_Về Aubade"
 
 #: src/gtk/playback-control.ui:213
 msgid "_Quit"
@@ -393,8 +393,8 @@ msgid "translator-credits"
 msgstr "Nguyễn Tri Phương <triphuong@falcolabs.org>"
 
 #: src/application.rs:255
-msgid "Amberol needs to run in the background to play music"
-msgstr "Amberol cần quyền chạy trong nền để chơi nhạc"
+msgid "Aubade needs to run in the background to play music"
+msgstr "Aubade cần quyền chạy trong nền để chơi nhạc"
 
 #: src/cover_picture.rs:75
 msgid "Cover image"

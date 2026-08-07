@@ -1,14 +1,14 @@
-# Amberol.
-# Copyright (C) 2022 Amberol COPYRIGHT HOLDER
-# This file is distributed under the same license as the Amberol package.
+# Aubade.
+# Copyright (C) 2022 Aubade COPYRIGHT HOLDER
+# This file is distributed under the same license as the Aubade package.
 # Seyed Eshag Moghim Shahidani <eshag094@gmail.com>, 2022.
 # Seyed Hosein Mousavi Fard <shmf.mosuavi1385@gmail.com>, 2022.
 # Danial Behzadi <dani.behzi@ubuntu.com>, 2022-2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: amberol\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/amberol/-/issues/\n"
+"Project-Id-Version: aubade\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/World/aubade/-/issues/\n"
 "POT-Creation-Date: 2025-08-09 12:17+0000\n"
 "PO-Revision-Date: 2025-08-09 21:42+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
@@ -20,57 +20,57 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
 "X-Generator: Poedit 3.6\n"
 
-#: data/io.bassi.Amberol.desktop.in.in:2 data/io.bassi.Amberol.metainfo.xml.in.in:6
-msgid "Amberol"
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:2 data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:6
+msgid "Aubade"
 msgstr "امبرول"
 
-#: data/io.bassi.Amberol.desktop.in.in:3
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:3
 msgid "Music Player"
 msgstr "پخش‌کنندهٔ آهنگ"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/io.bassi.Amberol.desktop.in.in:11
+#: data/io.github.workbydivyanshu.Aubade.desktop.in.in:11
 msgid "music;player;media;audio;playlist;"
 msgstr "music;player:media;موزیک;آهنگ;موسیقی;صدا;صوت;آوا;پخش‌کننده;رسانه;"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:7
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:7
 msgid "Plays music, and nothing else"
 msgstr "پخش آهنگ و هیچ چیز دیگر"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:9
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:9
 msgid ""
-"Amberol is a music player with no delusions of grandeur. If you just want to "
-"play music available on your local system then Amberol is the music player you "
+"Aubade is a music player with no delusions of grandeur. If you just want to "
+"play music available on your local system then Aubade is the music player you "
 "are looking for."
 msgstr ""
 "امبرول پخش‌کنندهٔ آهنگی بدون توهّم بزرگی است. اگر فقط می‌خواهید آهنگ‌های روی سامانهٔ "
 "محلیتان را پخش کنید، امبرول پخش‌کنندهٔ آهنگیست که دنبالش می‌گردید."
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:14
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:14
 msgid "Current features:"
 msgstr "ویژگی‌های کنونی:"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:16
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:16
 msgid "adaptive UI"
 msgstr "رابط کاربری تطبیقی"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:17
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:17
 msgid "UI recoloring using the album art"
 msgstr "تغییر رنگ رابط کاربری با استفاده از تصویر آلبوم"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:18
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:18
 msgid "drag and drop support to queue songs"
 msgstr "پشتیبانی از کشیدن و انداختن برای صف کردن آهنگ‌ها"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:19
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:19
 msgid "shuffle and repeat"
 msgstr "بُر زدن و تکرار"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:20
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:20
 msgid "MPRIS integration"
 msgstr "یکپارچگی MPRIS"
 
-#: data/io.bassi.Amberol.metainfo.xml.in.in:48
+#: data/io.github.workbydivyanshu.Aubade.metainfo.xml.in.in:48
 msgid "Emmanuele Bassi"
 msgstr "امانوئل باسی"
 
@@ -291,7 +291,7 @@ msgid "_Keyboard Shortcuts"
 msgstr "_میان‌برهای صفحه‌کلید"
 
 #: src/gtk/playback-control.ui:209
-msgid "_About Amberol"
+msgid "_About Aubade"
 msgstr "_دربارهٔ امبرول"
 
 #: src/gtk/playback-control.ui:213
@@ -389,7 +389,7 @@ msgstr ""
 "سید اسحاق مقیم شهیدانی <eshagh094@gmail.com>"
 
 #: src/application.rs:255
-msgid "Amberol needs to run in the background to play music"
+msgid "Aubade needs to run in the background to play music"
 msgstr "لازم است امبرول برای پخش آهنگ در پس‌زمینه اجرا شود"
 
 #: src/cover_picture.rs:75
@@ -519,7 +519,7 @@ msgstr "ناتوان در گشودن شاخه"
 #~ msgid "Plays music and nothing else"
 #~ msgstr "پخش آهنگ، و دیگر هیچ"
 
-#~ msgid "Amberol cannot run in the background"
+#~ msgid "Aubade cannot run in the background"
 #~ msgstr "امبرول نتوانست در پس‌زمینه اجرا شود"
 
 #~ msgid "{} hour"
@@ -533,7 +533,7 @@ msgstr "ناتوان در گشودن شاخه"
 #~ msgid "Unrecognized file type for “{}”"
 #~ msgstr "گونهٔ پروندهٔ «{}» شناسایی نشده"
 
-#~ msgid "Amberol is running in the background"
+#~ msgid "Aubade is running in the background"
 #~ msgstr "امبرول دارد در پس‌زمینه اجرا می‌شود"
 
 #~ msgctxt "shortcut window"
@@ -588,7 +588,7 @@ msgstr "ناتوان در گشودن شاخه"
 #~ msgid "Improve extraction of the song metadata"
 #~ msgstr "بهبود استخراج ابرداده آهنگ"
 
-#~ msgid "Thanks to everyone who tried Amberol and filed issues!"
+#~ msgid "Thanks to everyone who tried Aubade and filed issues!"
 #~ msgstr "تشکر از همه کسانی که آمبرول را امتحان کردند و مشکل‌ها را پر!"
 
 #~ msgid "Bugs never end, and so does bug squashing."
@@ -614,10 +614,10 @@ msgstr "ناتوان در گشودن شاخه"
 #~ msgid "A brown paper bag release fixing an embarrassing bug."
 #~ msgstr "رها کردن کیسه کاغذی قهوه‌ای برای رفع یک اشکال شرم‌آور."
 
-#~ msgid "The first beta release for Amberol! Isn't this exciting?"
+#~ msgid "The first beta release for Aubade! Isn't this exciting?"
 #~ msgstr "اولین نگارش بتا برای آمبرول! آیا این هیجان انگیز نیست؟"
 
-#~ msgid "Show an initial page when launching Amberol"
+#~ msgid "Show an initial page when launching Aubade"
 #~ msgstr "هنگام راه‌اندازی آمبرول یک صفحهٔ اولیه را نشان می‌دهد"
 
 #~ msgid "Make the layout more mobile friendly without impacting desktop users"
