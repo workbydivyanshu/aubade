@@ -45,7 +45,7 @@ else
   version_suffix = ''
 endif
 
-application_id = 'io.bassi.Amberol@0@'.format(profile)
+application_id = 'io.github.workbydivyanshu.Aubade@0@'.format(profile)
 
 subdir('data')
 subdir('src')
