@@ -27,7 +27,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for PlayerState {
-        const NAME: &'static str = "AmberolPlayerState";
+        const NAME: &'static str = "AubadePlayerState";
         type Type = super::PlayerState;
 
         fn new() -> Self {

@@ -38,7 +38,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for Marquee {
-        const NAME: &'static str = "AmberolMarquee";
+        const NAME: &'static str = "AubadeMarquee";
         type Type = super::Marquee;
         type ParentType = gtk::Widget;
 

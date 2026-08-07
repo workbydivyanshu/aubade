@@ -8,7 +8,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, CompositeTemplate)]
-    #[template(resource = "/io/bassi/Amberol/playlist-view.ui")]
+    #[template(resource = "/io/github/workbydivyanshu/Aubade/playlist-view.ui")]
     pub struct PlaylistView {
         #[template_child]
         pub back_button: TemplateChild<gtk::Button>,
@@ -34,7 +34,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for PlaylistView {
-        const NAME: &'static str = "AmberolPlaylistView";
+        const NAME: &'static str = "AubadePlaylistView";
         type Type = super::PlaylistView;
         type ParentType = gtk::Widget;
 

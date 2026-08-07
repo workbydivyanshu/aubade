@@ -98,7 +98,7 @@ mod tests {
 
     fn scratch(tag: &str) -> PathBuf {
         let mut dir = std::env::temp_dir();
-        dir.push(format!("amberol-lyrics-{}-{}", std::process::id(), tag));
+        dir.push(format!("aubade-lyrics-{}-{}", std::process::id(), tag));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         dir
