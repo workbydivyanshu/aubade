@@ -1,0 +1,10 @@
+{
+  "id": 496,
+  "trackName": "Placeholder Song",
+  "artistName": "Placeholder Artist",
+  "albumName": "Placeholder Album",
+  "duration": 239.0,
+  "instrumental": false,
+  "plainLyrics": "placeholder line one\nplaceholder line two",
+  "syncedLyrics": "[00:12.34]placeholder line one\n[00:20.00]placeholder line two"
+}
