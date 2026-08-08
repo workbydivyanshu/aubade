@@ -75,6 +75,67 @@ template $AubadeFullScreenView: Widget {
           "fullscreen",
         ]
       }
+
+      CenterBox {
+        margin-start: 28;
+        margin-end: 28;
+        margin-top: 10;
+        margin-bottom: 22;
+
+        [center]
+        Box {
+          spacing: 18;
+          halign: center;
+
+          Button {
+            icon-name: "media-skip-backward-symbolic";
+            tooltip-text: _("Previous");
+            action-name: "win.previous";
+            valign: center;
+
+            styles [
+              "circular",
+              "flat",
+            ]
+          }
+
+          Button fullscreen_play_button {
+            icon-name: "media-playback-start-symbolic";
+            tooltip-text: _("Play");
+            action-name: "win.play";
+            valign: center;
+
+            styles [
+              "circular",
+            ]
+          }
+
+          Button {
+            icon-name: "media-skip-forward-symbolic";
+            tooltip-text: _("Next");
+            action-name: "win.next";
+            valign: center;
+
+            styles [
+              "circular",
+              "flat",
+            ]
+          }
+        }
+
+        [end]
+        Button {
+          icon-name: "go-previous-symbolic";
+          tooltip-text: _("Leave Full Screen");
+          action-name: "win.leave-fullscreen";
+          valign: center;
+
+          styles [
+            "circular",
+            "flat",
+          ]
+        }
+      }
     }
   }
 }

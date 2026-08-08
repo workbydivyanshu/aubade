@@ -1493,6 +1493,7 @@ impl Window {
             } else {
                 play_button.set_icon_name("media-playback-start-symbolic");
             }
+            self.imp().fullscreen_view.set_playing(state.playing());
         }
     }
 
@@ -1810,11 +1811,6 @@ impl Window {
                 self.set_default_widget(Some(&self.imp().add_folder_button.get()));
             }
             WindowMode::MainView => {
-                // TEMPORARY verification hook: no way to press F11 from here.
-                if std::env::var("AUBADE_FULLSCREEN").is_ok() {
-                    stack.set_visible_child_name("fullscreen");
-                    return;
-                }
                 stack.set_visible_child_name("main-view");
                 self.set_default_widget(Some(&self.imp().playback_control.play_button()));
             }

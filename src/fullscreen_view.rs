@@ -22,6 +22,8 @@ mod imp {
         pub title_label: TemplateChild<gtk::Label>,
         #[template_child]
         pub artist_label: TemplateChild<gtk::Label>,
+        #[template_child]
+        pub fullscreen_play_button: TemplateChild<gtk::Button>,
     }
 
     #[glib::object_subclass]
@@ -84,6 +86,17 @@ impl FullScreenView {
         }
 
         imp.backdrop.set_texture(cover);
+    }
+
+    /// Mirrors the play/pause icon so the full-screen transport reflects
+    /// playback state, like the main controls do.
+    pub fn set_playing(&self, playing: bool) {
+        let icon = if playing {
+            "media-playback-pause-symbolic"
+        } else {
+            "media-playback-start-symbolic"
+        };
+        self.imp().fullscreen_play_button.set_icon_name(icon);
     }
 
     pub fn set_details(&self, title: &str, artist: &str) {
