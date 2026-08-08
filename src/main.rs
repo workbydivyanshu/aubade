@@ -3,9 +3,11 @@
 
 mod application;
 mod audio;
+mod blurred_backdrop;
 mod config;
 mod cover_picture;
 mod drag_overlay;
+mod fullscreen_view;
 mod i18n;
 mod lyrics;
 mod lyrics_view;

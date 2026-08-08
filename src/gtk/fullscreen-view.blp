@@ -1,0 +1,80 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026
+
+using Gtk 4.0;
+
+template $AubadeFullScreenView: Widget {
+  Overlay {
+    $AubadeBlurredBackdrop backdrop {
+      hexpand: true;
+      vexpand: true;
+    }
+
+    [overlay]
+    Box scrim {
+      hexpand: true;
+      vexpand: true;
+
+      styles [
+        "fullscreen-scrim",
+      ]
+    }
+
+    [overlay]
+    Box {
+      orientation: vertical;
+      hexpand: true;
+      vexpand: true;
+
+      Box {
+        spacing: 12;
+        margin-start: 28;
+        margin-end: 28;
+        margin-top: 22;
+        margin-bottom: 8;
+
+        Image cover_thumb {
+          pixel-size: 56;
+          overflow: hidden;
+
+          styles [
+            "card",
+          ]
+        }
+
+        Box {
+          orientation: vertical;
+          valign: center;
+          hexpand: true;
+
+          Label title_label {
+            xalign: 0;
+            ellipsize: end;
+
+            styles [
+              "fullscreen-title",
+            ]
+          }
+
+          Label artist_label {
+            xalign: 0;
+            ellipsize: end;
+
+            styles [
+              "fullscreen-artist",
+            ]
+          }
+        }
+      }
+
+      $AubadeLyricsView lyrics_view {
+        hexpand: true;
+        vexpand: true;
+
+        styles [
+          "fullscreen",
+        ]
+      }
+    }
+  }
+}
