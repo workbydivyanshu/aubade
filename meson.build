@@ -9,6 +9,7 @@ project('aubade', 'rust',
 )
 
 dependency('gtk4', version: '>= 4.19.5')
+dependency('libsoup-3.0', version: '>= 3.0')
 dependency('libadwaita-1', version: '>= 1.8.rc')
 dependency('gstreamer-1.0', version: '>= 1.20')
 dependency('gstreamer-audio-1.0', version: '>= 1.20')
