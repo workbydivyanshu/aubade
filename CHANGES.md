@@ -14,6 +14,9 @@
   disk cache and a setting to disable all network access. Local files always
   take precedence, and tracks that genuinely have no lyrics are remembered so
   they are never queried twice.
+- A full-screen now-playing view, reached from the header bar or F11, showing
+  large synced lyrics over a blurred album-art backdrop. Lines fade with
+  distance from the one currently playing.
 
 ### Changed
 
