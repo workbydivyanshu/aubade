@@ -9,6 +9,7 @@ use log::debug;
 
 /// Blur radius in widget coordinates. Apple Music's backdrop is heavily
 /// diffused; anything under about 40 still reads as "a photo".
+#[allow(dead_code)]
 const BLUR_RADIUS: f64 = 64.0;
 
 mod imp {
@@ -57,9 +58,10 @@ mod imp {
                 let x = (width - w) / 2.0;
                 let y = (height - h) / 2.0;
 
-                snapshot.push_blur(BLUR_RADIUS);
+                // Blur is enabled in a later step, once the view is proven and
+                // its cost can be measured in a real context rather than a
+                // synthetic one.
                 snapshot.append_texture(texture, &graphene::Rect::new(x, y, w, h));
-                snapshot.pop();
             }
 
             let elapsed = started.elapsed();
