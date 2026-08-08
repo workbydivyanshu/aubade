@@ -21,5 +21,13 @@
 	  <key name="background-play" type="b">
 	    <default>true</default>
 	  </key>
+	  <key name="fetch-lyrics-online" type="b">
+	    <default>true</default>
+	    <summary>Fetch lyrics online</summary>
+	    <description>
+	      Look up time-synced lyrics from LRCLIB when a song has no local
+	      lyrics file. When disabled, Aubade makes no network requests.
+	    </description>
+	  </key>
 	</schema>
 </schemalist>
