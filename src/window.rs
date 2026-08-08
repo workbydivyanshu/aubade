@@ -19,7 +19,11 @@ use crate::{
     config::APPLICATION_ID,
     drag_overlay::DragOverlay,
     i18n::{i18n, i18n_k, ni18n_f, ni18n_k},
-    lyrics::loader,
+    lyrics::{
+        cache, loader,
+        provider::{ProviderResult, TrackQuery},
+        Lyrics,
+    },
     lyrics_view::LyricsView,
     playback_control::PlaybackControl,
     playlist_view::PlaylistView,
@@ -495,17 +499,115 @@ impl Window {
 
     /// Loads the sidecar lyrics for the current song, and hides the toggle
     /// entirely when there are none.
+    /// Resolves lyrics for the current song: sidecar file, then disk cache,
+    /// then the network.
     fn update_lyrics(&self) {
+        let song = match self.player().and_then(|p| p.state().current_song()) {
+            Some(s) => s,
+            None => {
+                self.apply_lyrics(None);
+                return;
+            }
+        };
+
+        // 1. A file the user put beside the audio always wins.
+        if let Some(lyrics) = song
+            .lyrics_path()
+            .and_then(|p| loader::load_from_sidecar(&p))
+        {
+            debug!("Using sidecar lyrics");
+            self.apply_lyrics(Some(lyrics));
+            return;
+        }
+
+        let query = TrackQuery {
+            artist: song.artist(),
+            title: song.title(),
+            album: Some(song.album()),
+            duration_secs: song.duration(),
+        };
+        let key = cache::cache_key(&query);
+
+        // 2. The cache, including remembered misses.
+        if let Some(entry) = cache::load(&key) {
+            if !entry.is_expired() {
+                match entry {
+                    cache::CacheEntry::Hit(l) => {
+                        debug!("Using cached lyrics");
+                        self.apply_lyrics(Some(l));
+                    }
+                    cache::CacheEntry::Miss { .. } => {
+                        debug!("Cached miss; not querying again");
+                        self.apply_lyrics(None);
+                    }
+                }
+                return;
+            }
+        }
+
+        // Nothing local: hide the toggle until a network result arrives.
+        self.apply_lyrics(None);
+
+        if !self.fetch_lyrics_online() {
+            debug!("Online lyrics lookup is disabled");
+            return;
+        }
+        if query.artist.is_empty() || query.title.is_empty() {
+            debug!("Skipping lyrics lookup: incomplete metadata");
+            return;
+        }
+
+        // 3. The network, asynchronously on the main context.
+        let uri = song.uri();
+        glib::MainContext::default().spawn_local(clone!(
+            #[weak(rename_to = win)]
+            self,
+            async move {
+                debug!("Looking up lyrics online");
+                let result = crate::lyrics::lrclib::fetch(&query).await;
+
+                // Playback may have moved on while this was in flight.
+                // Applying a late response would show the wrong song's lyrics.
+                let still_current = win
+                    .player()
+                    .and_then(|p| p.state().current_song())
+                    .map(|s| s.uri() == uri)
+                    .unwrap_or(false);
+                if !still_current {
+                    debug!("Discarding lyrics for a song that is no longer playing");
+                    return;
+                }
+
+                let entry = match result {
+                    ProviderResult::Found(l) => {
+                        debug!("Found lyrics online");
+                        win.apply_lyrics(Some(l.clone()));
+                        cache::CacheEntry::Hit(l)
+                    }
+                    ProviderResult::NoneExist => {
+                        debug!("No lyrics exist for this track");
+                        cache::CacheEntry::Miss {
+                            definitive: true,
+                            stored_at: cache::now_secs(),
+                        }
+                    }
+                    ProviderResult::Failed => {
+                        debug!("Lyrics lookup failed; will retry later");
+                        cache::CacheEntry::Miss {
+                            definitive: false,
+                            stored_at: cache::now_secs(),
+                        }
+                    }
+                };
+                cache::store(&key, &entry);
+            }
+        ));
+    }
+
+    /// Shows lyrics, or hides the toggle entirely when there are none.
+    fn apply_lyrics(&self, lyrics: Option<Lyrics>) {
         let imp = self.imp();
-
-        let lyrics = self
-            .player()
-            .and_then(|player| player.state().current_song())
-            .and_then(|song| song.lyrics_path())
-            .and_then(|path| loader::load_from_sidecar(&path));
-
         let has_lyrics = lyrics.is_some();
-        debug!("Lyrics available for the current song: {}", has_lyrics);
 
         imp.lyrics_view.set_lyrics(lyrics);
         imp.lyrics_button.set_visible(has_lyrics);
