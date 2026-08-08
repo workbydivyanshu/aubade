@@ -90,6 +90,18 @@ template $AubadeWindow: Adw.ApplicationWindow {
                   show-title: false;
 
                   [end]
+                  Button fullscreen_button {
+                    icon-name: "fullscreen-symbolic";
+                    tooltip-text: _("Full Screen");
+                    action-name: "win.fullscreen";
+                    valign: center;
+
+                    accessibility {
+                      label: C_("a11y", "Full screen");
+                    }
+                  }
+
+                  [end]
                   ToggleButton lyrics_button {
                     icon-name: "lyrics-symbolic";
                     tooltip-text: _("Show Lyrics");
@@ -192,6 +204,12 @@ template $AubadeWindow: Adw.ApplicationWindow {
 
               sidebar: $AubadePlaylistView playlist_view {};
             };
+          }
+
+          StackPage {
+            name: "fullscreen";
+
+            child: $AubadeFullScreenView fullscreen_view {};
           }
         };
       };
