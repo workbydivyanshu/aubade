@@ -10,6 +10,10 @@
   have lyrics.
 - Millisecond-precision playback position, exposed alongside the existing
   second-granularity position so lyrics can track playback accurately.
+- Online lyrics lookup via LRCLIB for songs with no local `.lrc` file, with a
+  disk cache and a setting to disable all network access. Local files always
+  take precedence, and tracks that genuinely have no lyrics are remembered so
+  they are never queried twice.
 
 ### Changed
 
