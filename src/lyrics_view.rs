@@ -8,6 +8,19 @@ use gtk::{glib, prelude::*, CompositeTemplate};
 
 use crate::lyrics::Lyrics;
 
+/// Dimmest a line may become. Lines never vanish entirely, or the lyrics read
+/// as truncated rather than faded.
+const MIN_LYRIC_OPACITY: f64 = 0.25;
+
+/// Opacity for a line `distance` rows away from the active one.
+pub fn opacity_for_distance(distance: usize) -> f64 {
+    if distance == 0 {
+        return 1.0;
+    }
+    let faded = 1.0 - (distance as f64 * 0.18);
+    faded.max(MIN_LYRIC_OPACITY)
+}
+
 mod imp {
     use super::*;
 
@@ -124,6 +137,17 @@ impl LyricsView {
                 if let Some(label) = labels.get(current) {
                     label.add_css_class("lyric-active");
                 }
+
+                // Fade with distance from the active line, so the lyrics read
+                // as moving rather than merely highlighting.
+                for (index, label) in labels.iter().enumerate() {
+                    let distance = index.abs_diff(current);
+                    label.set_opacity(opacity_for_distance(distance));
+                }
+            } else {
+                for label in labels.iter() {
+                    label.set_opacity(1.0);
+                }
             }
         }
 
@@ -165,5 +189,48 @@ impl LyricsView {
         let max = (adjustment.upper() - adjustment.page_size()).max(adjustment.lower());
 
         adjustment.set_value(target.clamp(adjustment.lower(), max));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn active_line_is_fully_opaque() {
+        assert_eq!(opacity_for_distance(0), 1.0);
+    }
+
+    #[test]
+    fn opacity_never_increases_with_distance() {
+        let mut previous = opacity_for_distance(0);
+        for distance in 1..20 {
+            let current = opacity_for_distance(distance);
+            assert!(
+                current <= previous,
+                "distance {} was brighter than {}",
+                distance,
+                distance - 1
+            );
+            previous = current;
+        }
+    }
+
+    #[test]
+    fn nearby_lines_are_visibly_dimmer_than_the_active_one() {
+        // Falloff must be real before the floor is reached, or neighbouring
+        // lines are indistinguishable from the active one.
+        assert!(opacity_for_distance(1) < opacity_for_distance(0));
+        assert!(opacity_for_distance(2) < opacity_for_distance(1));
+        assert!(opacity_for_distance(3) < opacity_for_distance(2));
+    }
+
+    #[test]
+    fn distant_lines_stay_visible() {
+        // Lines must never vanish entirely, or the lyrics look truncated
+        // rather than faded.
+        for distance in 0..100 {
+            assert!(opacity_for_distance(distance) >= 0.25);
+        }
     }
 }
