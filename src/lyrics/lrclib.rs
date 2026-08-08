@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: 2026
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use gtk::glib::Uri;
+use gtk::glib::{self, Uri};
 use log::warn;
 use serde_json::Value;
+use soup::prelude::*;
 
 use super::{
     provider::{ProviderResult, TrackQuery},
@@ -98,6 +99,69 @@ pub fn decode_search(body: &str, duration_secs: u64) -> ProviderResult {
     ProviderResult::Failed
 }
 
+const TIMEOUT_SECS: u32 = 10;
+
+fn user_agent() -> String {
+    format!(
+        "Aubade/{} (https://github.com/workbydivyanshu/aubade)",
+        crate::config::VERSION
+    )
+}
+
+async fn get_body(session: &soup::Session, url: &str) -> Option<String> {
+    let message = match soup::Message::new("GET", url) {
+        Ok(m) => m,
+        Err(e) => {
+            warn!("Invalid LRCLIB URL: {e}");
+            return None;
+        }
+    };
+
+    let bytes = match session
+        .send_and_read_future(&message, glib::Priority::DEFAULT)
+        .await
+    {
+        Ok(b) => b,
+        Err(e) => {
+            warn!("LRCLIB request failed: {e}");
+            return None;
+        }
+    };
+
+    let status = message.status();
+    if status != soup::Status::Ok {
+        // 404 is the ordinary "no match" answer, not something worth shouting
+        // about, or the log fills with normal misses.
+        if status != soup::Status::NotFound {
+            warn!("LRCLIB returned status {status:?}");
+        }
+        return None;
+    }
+
+    Some(String::from_utf8_lossy(&bytes).to_string())
+}
+
+/// Looks a track up on LRCLIB, falling back to search when the exact lookup
+/// misses.
+pub async fn fetch(query: &TrackQuery) -> ProviderResult {
+    let session = soup::Session::new();
+    session.set_timeout(TIMEOUT_SECS);
+    session.set_user_agent(&user_agent());
+
+    if let Some(body) = get_body(&session, &get_url(query)).await {
+        match decode_get(&body) {
+            ProviderResult::Found(l) => return ProviderResult::Found(l),
+            ProviderResult::NoneExist => return ProviderResult::NoneExist,
+            ProviderResult::Failed => {}
+        }
+    }
+
+    match get_body(&session, &search_url(query)).await {
+        Some(body) => decode_search(&body, query.duration_secs),
+        None => ProviderResult::Failed,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -127,7 +191,7 @@ mod tests {
                 assert_eq!(l.lines.len(), 2);
                 assert_eq!(l.lines[0].time_ms, 12_340);
             }
-            other => panic!("expected Found, got {other:?}"),
+            other => panic!("expected Found, got {:?}", other),
         }
     }
 
@@ -156,7 +220,7 @@ mod tests {
     fn search_picks_the_candidate_matching_duration() {
         match decode_search(&fixture("lrclib_search.json"), 200) {
             ProviderResult::Found(l) => assert_eq!(l.lines[0].time_ms, 9_000),
-            other => panic!("expected Found, got {other:?}"),
+            other => panic!("expected Found, got {:?}", other),
         }
     }
 
