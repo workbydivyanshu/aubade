@@ -18,6 +18,7 @@ use crate::{
     audio::{AudioPlayer, RepeatMode, ReplayGainMode, Song},
     config::APPLICATION_ID,
     drag_overlay::DragOverlay,
+    fullscreen_view::FullScreenView,
     i18n::{i18n, i18n_k, ni18n_f, ni18n_k},
     lyrics::{
         cache, loader,
@@ -40,6 +41,7 @@ use crate::{
 pub enum WindowMode {
     InitialView,
     MainView,
+    FullScreen,
 }
 
 const ATTRIBUTE_HOST_PATH: &str = "xattr::document-portal.host-path";
@@ -70,6 +72,10 @@ mod imp {
         pub lyrics_view: TemplateChild<LyricsView>,
         #[template_child]
         pub lyrics_button: TemplateChild<gtk::ToggleButton>,
+        #[template_child]
+        pub fullscreen_view: TemplateChild<FullScreenView>,
+        #[template_child]
+        pub fullscreen_button: TemplateChild<gtk::Button>,
         #[template_child]
         pub song_details: TemplateChild<SongDetails>,
         #[template_child]
@@ -228,6 +234,13 @@ mod imp {
             klass.install_property_action("queue.select", "playlist-selection");
             klass.install_property_action("queue.search", "playlist-search");
             klass.install_property_action("lyrics.toggle", "lyrics-visible");
+
+            klass.install_action("win.fullscreen", None, move |win, _, _| {
+                win.switch_mode(WindowMode::FullScreen);
+            });
+            klass.install_action("win.leave-fullscreen", None, move |win, _, _| {
+                win.switch_mode(WindowMode::MainView);
+            });
             klass.install_property_action("win.replaygain", "replaygain-mode");
 
             klass.install_action(
@@ -246,6 +259,7 @@ mod imp {
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
             LyricsView::static_type();
+            FullScreenView::static_type();
             obj.init_template();
         }
 
@@ -256,6 +270,8 @@ mod imp {
                 cover_stack: TemplateChild::default(),
                 lyrics_view: TemplateChild::default(),
                 lyrics_button: TemplateChild::default(),
+                fullscreen_view: TemplateChild::default(),
+                fullscreen_button: TemplateChild::default(),
                 split_view: TemplateChild::default(),
                 toast_overlay: TemplateChild::default(),
                 drag_overlay: TemplateChild::default(),
@@ -609,6 +625,7 @@ impl Window {
         let imp = self.imp();
         let has_lyrics = lyrics.is_some();
 
+        imp.fullscreen_view.lyrics_view().set_lyrics(lyrics.clone());
         imp.lyrics_view.set_lyrics(lyrics);
         imp.lyrics_button.set_visible(has_lyrics);
 
@@ -885,7 +902,12 @@ impl Window {
                     #[weak(rename_to = win)]
                     self,
                     move |state, _| {
-                        win.imp().lyrics_view.set_position_ms(state.position_ms());
+                        let position = state.position_ms();
+                        win.imp().lyrics_view.set_position_ms(position);
+                        win.imp()
+                            .fullscreen_view
+                            .lyrics_view()
+                            .set_position_ms(position);
                     }
                 ),
             );
@@ -1499,6 +1521,14 @@ impl Window {
             self.update_playlist_time();
             self.update_title(state.current_song().as_ref());
             self.update_style(state.current_song().as_ref());
+
+            match state.current_song() {
+                Some(song) => self
+                    .imp()
+                    .fullscreen_view
+                    .set_details(&song.title(), &song.artist()),
+                None => self.imp().fullscreen_view.set_details("", ""),
+            }
         }
     }
 
@@ -1509,9 +1539,11 @@ impl Window {
             if let Some(cover) = state.cover() {
                 song_cover.album_image().set_cover(Some(&cover));
                 song_cover.show_cover_image(true);
+                self.imp().fullscreen_view.set_cover(Some(cover.clone()));
             } else {
                 song_cover.album_image().set_cover(None);
                 song_cover.show_cover_image(false);
+                self.imp().fullscreen_view.set_cover(None);
             }
         }
     }
@@ -1778,8 +1810,16 @@ impl Window {
                 self.set_default_widget(Some(&self.imp().add_folder_button.get()));
             }
             WindowMode::MainView => {
+                // TEMPORARY verification hook: no way to press F11 from here.
+                if std::env::var("AUBADE_FULLSCREEN").is_ok() {
+                    stack.set_visible_child_name("fullscreen");
+                    return;
+                }
                 stack.set_visible_child_name("main-view");
                 self.set_default_widget(Some(&self.imp().playback_control.play_button()));
+            }
+            WindowMode::FullScreen => {
+                stack.set_visible_child_name("fullscreen");
             }
         };
     }

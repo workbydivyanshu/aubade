@@ -6,6 +6,7 @@
     <file alias="edit-clear-all-symbolic.svg">assets/icons/edit-clear-all-symbolic.svg</file>
     <file alias="edit-select-all-symbolic.svg">assets/icons/edit-select-all-symbolic.svg</file>
     <file alias="folder-music-symbolic.svg">assets/icons/folder-music-symbolic.svg</file>
+    <file alias="fullscreen-symbolic.svg">assets/icons/fullscreen-symbolic.svg</file>
     <file alias="lyrics-symbolic.svg">assets/icons/lyrics-symbolic.svg</file>
     <file alias="go-previous-symbolic.svg">assets/icons/go-previous-symbolic.svg</file>
     <file alias="media-playback-pause.svg">assets/icons/media-playback-pause-symbolic.svg</file>

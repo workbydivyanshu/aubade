@@ -78,6 +78,8 @@ mod imp {
             obj.set_accels_for_action("win.next", &["<primary>n"]);
             obj.set_accels_for_action("win.play", &["<primary>p"]);
             obj.set_accels_for_action("win.copy", &["<primary>c"]);
+            obj.set_accels_for_action("win.fullscreen", &["F11"]);
+            obj.set_accels_for_action("win.leave-fullscreen", &["Escape"]);
         }
     }
 

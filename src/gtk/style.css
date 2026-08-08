@@ -169,3 +169,27 @@ volume > scale trough slider { opacity: 0; }
   opacity: 1;
   font-weight: bold;
 }
+
+.fullscreen-scrim {
+  background: rgb(0 0 0 / 55%);
+}
+
+.fullscreen-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.fullscreen-artist {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+lyricsview.fullscreen .lyric-line {
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin: 6px 0;
+}
+
+lyricsview.fullscreen .lyric-active {
+  font-weight: bold;
+}
