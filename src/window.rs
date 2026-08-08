@@ -395,7 +395,31 @@ impl Window {
                     .set_boolean("enable-recoloring", enable_recoloring)
                     .expect("Unable to store setting");
             })
-            .build()])
+            .build()]);
+
+        let fetch_lyrics = self.imp().settings.boolean("fetch-lyrics-online");
+        self.add_action_entries([gio::ActionEntry::builder("fetch-lyrics-online")
+            .state(fetch_lyrics.to_variant())
+            .activate(|this: &Window, action, _| {
+                let state = action.state().unwrap();
+                let action_state: bool = state.get().unwrap();
+                let fetch_lyrics = !action_state;
+                action.set_state(&fetch_lyrics.to_variant());
+
+                this.imp()
+                    .settings
+                    .set_boolean("fetch-lyrics-online", fetch_lyrics)
+                    .expect("Unable to store setting");
+
+                // Re-resolve straight away, so turning the setting on finds
+                // lyrics for the playing song without waiting for a track change.
+                this.update_lyrics();
+            })
+            .build()]);
+    }
+
+    fn fetch_lyrics_online(&self) -> bool {
+        self.imp().settings.boolean("fetch-lyrics-online")
     }
 
     fn setup_waveform(&self) {
