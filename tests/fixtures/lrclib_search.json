@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "trackName": "Placeholder Song",
+    "artistName": "Placeholder Artist",
+    "albumName": "Wrong Album",
+    "duration": 300.0,
+    "instrumental": false,
+    "syncedLyrics": "[00:05.00]wrong duration candidate"
+  },
+  {
+    "id": 2,
+    "trackName": "Placeholder Song",
+    "artistName": "Placeholder Artist",
+    "albumName": "Right Album",
+    "duration": 201.0,
+    "instrumental": false,
+    "syncedLyrics": "[00:09.00]correct candidate"
+  }
+]

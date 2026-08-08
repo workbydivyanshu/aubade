@@ -4,6 +4,7 @@
 pub mod cache;
 pub mod loader;
 pub mod lrc;
+pub mod lrclib;
 pub mod provider;
 
 pub use lrc::Lyrics;
