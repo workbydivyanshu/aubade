@@ -76,12 +76,18 @@ pub fn load_from_sidecar(sidecar_path: &Path) -> Option<Lyrics> {
     };
 
     let text = String::from_utf8_lossy(&bytes);
-    let lyrics = Lyrics::parse(&text);
 
-    if lyrics.is_empty() {
+    let lyrics = Lyrics::parse(&text);
+    if !lyrics.is_empty() {
+        return Some(lyrics);
+    }
+
+    // Real words but no timestamps: still worth showing, just not scrolled.
+    let unsynced = Lyrics::parse_unsynced(&text);
+    if unsynced.is_empty() {
         None
     } else {
-        Some(lyrics)
+        Some(unsynced)
     }
 }
 
@@ -151,11 +157,29 @@ mod tests {
     }
 
     #[test]
-    fn load_returns_none_for_blank_lyrics() {
+    fn falls_back_to_unsynced_when_there_are_no_timestamps() {
+        let dir = scratch("unsynced");
+        let song = dir.join("track.mp3");
+        fs::write(&song, b"").unwrap();
+        fs::write(
+            dir.join("track.lrc"),
+            b"first placeholder\nsecond placeholder",
+        )
+        .unwrap();
+
+        let lyrics = load_lyrics(&song).expect("unsynced lyrics are still worth showing");
+        assert!(!lyrics.synced);
+        assert_eq!(lyrics.lines.len(), 2);
+        assert_eq!(lyrics.active_line_at(60_000), None);
+    }
+
+    #[test]
+    fn load_returns_none_when_the_file_holds_no_words() {
         let dir = scratch("blank");
         let song = dir.join("track.mp3");
         fs::write(&song, b"").unwrap();
-        fs::write(dir.join("track.lrc"), b"no timestamps here").unwrap();
+        // Metadata and whitespace only: nothing anybody wants to read.
+        fs::write(dir.join("track.lrc"), b"[ar:Placeholder]\n\n   \n").unwrap();
         assert!(load_lyrics(&song).is_none());
     }
 
