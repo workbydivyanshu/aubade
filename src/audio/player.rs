@@ -448,8 +448,9 @@ impl AudioPlayer {
         self.backend.seek_position(pos as u64);
     }
 
+    /// Seeks to an absolute position in seconds, clamped to the song length.
     pub fn seek_position_abs(&self, position: u64) {
-        let pos = u64::max(position, self.state.duration());
+        let pos = u64::min(position, self.state.duration());
         self.backend.seek_position(pos);
     }
 
