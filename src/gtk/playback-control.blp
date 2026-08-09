@@ -195,6 +195,42 @@ menu primary_menu {
 
   section {
     submenu {
+      label: _("_Sleep Timer");
+
+      item {
+        label: C_("sleep-timer-menu", "_Off");
+        action: "win.sleep-timer";
+        target: "off";
+      }
+
+      item {
+        label: C_("sleep-timer-menu", "_15 minutes");
+        action: "win.sleep-timer";
+        target: "15";
+      }
+
+      item {
+        label: C_("sleep-timer-menu", "_30 minutes");
+        action: "win.sleep-timer";
+        target: "30";
+      }
+
+      item {
+        label: C_("sleep-timer-menu", "_45 minutes");
+        action: "win.sleep-timer";
+        target: "45";
+      }
+
+      item {
+        label: C_("sleep-timer-menu", "_1 hour");
+        action: "win.sleep-timer";
+        target: "60";
+      }
+    }
+  }
+
+  section {
+    submenu {
       label: _("_ReplayGain");
 
       item {
