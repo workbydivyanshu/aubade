@@ -4,7 +4,9 @@
 use std::cell::{Cell, RefCell};
 
 use adw::subclass::prelude::*;
+use glib::subclass::Signal;
 use gtk::{glib, prelude::*, CompositeTemplate};
+use once_cell::sync::Lazy;
 
 use crate::lyrics::Lyrics;
 
@@ -57,6 +59,16 @@ mod imp {
     }
 
     impl ObjectImpl for LyricsView {
+        fn signals() -> &'static [Signal] {
+            static SIGNALS: Lazy<Vec<Signal>> = Lazy::new(|| {
+                vec![Signal::builder("line-activated")
+                    .param_types([u64::static_type()])
+                    .build()]
+            });
+
+            SIGNALS.as_ref()
+        }
+
         fn dispose(&self) {
             while let Some(child) = self.obj().first_child() {
                 child.unparent();
@@ -94,6 +106,8 @@ impl LyricsView {
         imp.labels.borrow_mut().clear();
         imp.active.set(None);
 
+        let synced = lyrics.as_ref().map(|l| l.synced).unwrap_or(false);
+
         if let Some(lyrics) = &lyrics {
             let mut labels = imp.labels.borrow_mut();
             for line in &lyrics.lines {
@@ -104,6 +118,23 @@ impl LyricsView {
                     .max_width_chars(36)
                     .build();
                 label.add_css_class("lyric-line");
+
+                // Clicking a line seeks to it. Only meaningful when the lyrics
+                // carry timestamps; unsynced lines all sit at zero.
+                if synced {
+                    let time_ms = line.time_ms;
+                    let gesture = gtk::GestureClick::new();
+                    gesture.connect_released(glib::clone!(
+                        #[weak(rename_to = view)]
+                        self,
+                        move |_, _, _, _| {
+                            view.emit_by_name::<()>("line-activated", &[&time_ms]);
+                        }
+                    ));
+                    label.add_controller(gesture);
+                    label.set_cursor_from_name(Some("pointer"));
+                }
+
                 imp.lines_box.append(&label);
                 labels.push(label);
             }

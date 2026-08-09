@@ -376,6 +376,7 @@ impl Window {
             .property("application", application)
             .build();
 
+        win.setup_lyrics_seek();
         win.setup_waveform();
         win.setup_actions();
         win.setup_playlist();
@@ -493,6 +494,28 @@ impl Window {
 
     fn fetch_lyrics_online(&self) -> bool {
         self.imp().settings.boolean("fetch-lyrics-online")
+    }
+
+    /// Clicking a lyric line seeks to it.
+    fn setup_lyrics_seek(&self) {
+        let imp = self.imp();
+
+        for view in [imp.lyrics_view.get(), imp.fullscreen_view.lyrics_view()] {
+            view.connect_closure(
+                "line-activated",
+                false,
+                closure_local!(
+                    #[watch(rename_to = win)]
+                    self,
+                    move |_: LyricsView, time_ms: u64| {
+                        if let Some(player) = win.player() {
+                            debug!("Seeking to {time_ms} ms from a lyric line");
+                            player.seek_position_abs(time_ms / 1000);
+                        }
+                    }
+                ),
+            );
+        }
     }
 
     fn setup_waveform(&self) {
