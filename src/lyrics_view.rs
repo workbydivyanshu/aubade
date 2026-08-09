@@ -144,6 +144,20 @@ impl LyricsView {
         self.scroll_to_top();
     }
 
+    /// Shifts the timing of the loaded lyrics. A positive offset makes them
+    /// appear earlier.
+    pub fn set_offset_ms(&self, offset_ms: i64) {
+        let imp = self.imp();
+
+        if let Some(lyrics) = imp.lyrics.borrow_mut().as_mut() {
+            lyrics.offset_ms = offset_ms;
+        }
+
+        // Clear the cached active line so the next position update recomputes
+        // it against the new offset rather than short-circuiting.
+        imp.active.set(None);
+    }
+
     /// Updates the highlighted line for the current playback position.
     pub fn set_position_ms(&self, position_ms: u64) {
         let imp = self.imp();

@@ -138,6 +138,40 @@ pub fn store(key: &str, entry: &CacheEntry) {
     }
 }
 
+/// Reads a saved timing nudge for a track, in milliseconds.
+///
+/// Kept separate from the lyrics entry so it survives the lyrics being
+/// re-fetched, and so it applies to sidecar files that were never cached.
+pub fn load_offset(key: &str) -> Option<i64> {
+    let path = cache_dir().join(format!("{key}.offset"));
+    std::fs::read_to_string(path)
+        .ok()
+        .and_then(|t| t.trim().parse().ok())
+}
+
+pub fn store_offset(key: &str, offset_ms: i64) {
+    let dir = cache_dir();
+    if let Err(e) = std::fs::create_dir_all(&dir) {
+        warn!("Unable to create lyrics cache directory: {e}");
+        return;
+    }
+
+    let path = dir.join(format!("{key}.offset"));
+    let result = if offset_ms == 0 {
+        // Zero is the default; do not leave a file behind for it.
+        match std::fs::remove_file(&path) {
+            Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e),
+            _ => Ok(()),
+        }
+    } else {
+        std::fs::write(&path, offset_ms.to_string())
+    };
+
+    if let Err(e) = result {
+        warn!("Unable to write lyrics offset: {e}");
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -222,6 +256,26 @@ mod tests {
             stored_at: now_secs(),
         };
         assert!(!fresh.is_expired());
+    }
+
+    #[test]
+    fn offsets_round_trip_and_clear() {
+        let key = format!("offsettest{}", std::process::id());
+
+        store_offset(&key, -750);
+        assert_eq!(load_offset(&key), Some(-750));
+
+        store_offset(&key, 500);
+        assert_eq!(load_offset(&key), Some(500));
+
+        // Zero means default, and should not leave a file behind.
+        store_offset(&key, 0);
+        assert_eq!(load_offset(&key), None);
+    }
+
+    #[test]
+    fn missing_offset_reads_as_none() {
+        assert_eq!(load_offset("no-such-key-at-all"), None);
     }
 
     #[test]

@@ -195,6 +195,22 @@ menu primary_menu {
 
   section {
     submenu {
+      label: _("Lyrics _Timing");
+
+      item {
+        label: C_("lyrics-timing-menu", "Shift _Earlier");
+        action: "lyrics.earlier";
+      }
+
+      item {
+        label: C_("lyrics-timing-menu", "Shift _Later");
+        action: "lyrics.later";
+      }
+    }
+  }
+
+  section {
+    submenu {
       label: _("_Sleep Timer");
 
       item {
