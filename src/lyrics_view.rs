@@ -122,6 +122,12 @@ impl LyricsView {
             None => None,
         };
 
+        // Unsynced lyrics have no active line, so leave them as laid out
+        // rather than fading everything to the inactive style.
+        if active.is_none() && imp.active.get().is_none() {
+            return;
+        }
+
         if active == imp.active.get() {
             return;
         }

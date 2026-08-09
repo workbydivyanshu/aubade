@@ -20,6 +20,9 @@ pub struct LyricLine {
 pub struct Lyrics {
     pub lines: Vec<LyricLine>,
     pub offset_ms: i64,
+    /// False when the lines carry no timestamps. Unsynced lyrics are shown
+    /// statically: nothing to highlight, nothing to scroll to.
+    pub synced: bool,
 }
 
 impl Lyrics {
@@ -88,7 +91,37 @@ impl Lyrics {
 
         lines.sort_by_key(|line| line.time_ms);
 
-        Lyrics { lines, offset_ms }
+        Lyrics {
+            lines,
+            offset_ms,
+            synced: true,
+        }
+    }
+
+    /// Parses lyrics that carry no timestamps, one line of text per line.
+    ///
+    /// Used as a fallback when a file has real words but no timing, which is
+    /// otherwise indistinguishable from an empty file.
+    pub fn parse_unsynced(input: &str) -> Self {
+        let input = input.strip_prefix('\u{feff}').unwrap_or(input);
+
+        let lines = input
+            .lines()
+            .map(|raw| raw.trim_end_matches('\r').trim())
+            .filter(|text| !text.is_empty())
+            // Drop metadata tags; they are not words anybody wants to read.
+            .filter(|text| METADATA_RE.captures(text).is_none())
+            .map(|text| LyricLine {
+                time_ms: 0,
+                text: text.to_string(),
+            })
+            .collect();
+
+        Lyrics {
+            lines,
+            offset_ms: 0,
+            synced: false,
+        }
     }
 
     /// True when there is nothing worth showing: no lines at all, or every
@@ -102,7 +135,8 @@ impl Lyrics {
     ///
     /// A positive `[offset:]` makes lyrics appear earlier.
     pub fn active_line_at(&self, position_ms: u64) -> Option<usize> {
-        if self.lines.is_empty() {
+        // Without timestamps there is nothing to follow.
+        if !self.synced || self.lines.is_empty() {
             return None;
         }
 
@@ -238,5 +272,47 @@ mod tests {
     #[test]
     fn active_line_on_empty_lyrics_is_none() {
         assert_eq!(Lyrics::parse("").active_line_at(1_000), None);
+    }
+}
+
+#[cfg(test)]
+mod unsynced_tests {
+    use super::*;
+
+    #[test]
+    fn synced_lyrics_are_marked_synced() {
+        let l = Lyrics::parse("[00:01.00]placeholder line");
+        assert!(l.synced);
+    }
+
+    #[test]
+    fn unsynced_parse_keeps_every_text_line() {
+        let l = Lyrics::parse_unsynced("first line\nsecond line\nthird line");
+        assert_eq!(l.lines.len(), 3);
+        assert_eq!(l.lines[0].text, "first line");
+        assert_eq!(l.lines[2].text, "third line");
+        assert!(!l.synced);
+    }
+
+    #[test]
+    fn unsynced_parse_skips_metadata_and_blank_lines() {
+        let l = Lyrics::parse_unsynced("[ar:Placeholder]\n\nfirst line\n   \nsecond line");
+        assert_eq!(l.lines.len(), 2);
+        assert_eq!(l.lines[0].text, "first line");
+    }
+
+    #[test]
+    fn unsynced_parse_of_blank_input_is_empty() {
+        assert!(Lyrics::parse_unsynced("").is_empty());
+        assert!(Lyrics::parse_unsynced("[ar:Only Metadata]").is_empty());
+    }
+
+    #[test]
+    fn unsynced_lyrics_have_no_active_line() {
+        // Without timestamps there is nothing to follow, so the view must not
+        // highlight or scroll.
+        let l = Lyrics::parse_unsynced("first line\nsecond line");
+        assert_eq!(l.active_line_at(0), None);
+        assert_eq!(l.active_line_at(999_000), None);
     }
 }
