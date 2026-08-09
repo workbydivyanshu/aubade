@@ -5,6 +5,10 @@ Aubade
 
 A local music player for GNOME, with time-synced lyrics.
 
+![Aubade](./data/screenshots/aubade-main.png)
+
+*Screenshots use a demo track with synthetic artwork and placeholder lyrics.*
+
 Aubade plays the music already on your disk. It does not stream, it does not
 manage a library, and it does not need an account. Point it at a folder and it
 plays.
