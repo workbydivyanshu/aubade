@@ -107,6 +107,8 @@ mod imp {
 
         pub playlist_filtermodel: RefCell<Option<gio::ListModel>>,
         pub sleep_timer: RefCell<Option<glib::SourceId>>,
+        /// Cache key of the current song, for saving its lyrics timing nudge.
+        pub lyrics_key: RefCell<Option<String>>,
 
         pub notify_playing_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_position_id: RefCell<Option<glib::SignalHandlerId>>,
@@ -236,6 +238,13 @@ mod imp {
             klass.install_property_action("queue.search", "playlist-search");
             klass.install_property_action("lyrics.toggle", "lyrics-visible");
 
+            klass.install_action("lyrics.earlier", None, move |win, _, _| {
+                win.nudge_lyrics(250);
+            });
+            klass.install_action("lyrics.later", None, move |win, _, _| {
+                win.nudge_lyrics(-250);
+            });
+
             klass.install_action("win.fullscreen", None, move |win, _, _| {
                 win.switch_mode(WindowMode::FullScreen);
             });
@@ -292,6 +301,7 @@ mod imp {
                 lyrics_visible: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
                 sleep_timer: RefCell::default(),
+                lyrics_key: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
                 provider: gtk::CssProvider::new(),
                 settings: utils::settings_manager(),
@@ -602,6 +612,17 @@ impl Window {
             }
         };
 
+        // The key is computed up front, not just on the network path, so a
+        // saved timing nudge also applies to sidecar lyrics.
+        let query = TrackQuery {
+            artist: song.artist(),
+            title: song.title(),
+            album: Some(song.album()),
+            duration_secs: song.duration(),
+        };
+        let key = cache::cache_key(&query);
+        self.imp().lyrics_key.replace(Some(key.clone()));
+
         // 1. A file the user put beside the audio always wins.
         if let Some(lyrics) = song
             .lyrics_path()
@@ -611,14 +632,6 @@ impl Window {
             self.apply_lyrics(Some(lyrics));
             return;
         }
-
-        let query = TrackQuery {
-            artist: song.artist(),
-            title: song.title(),
-            album: Some(song.album()),
-            duration_secs: song.duration(),
-        };
-        let key = cache::cache_key(&query);
 
         // 2. The cache, including remembered misses.
         if let Some(entry) = cache::load(&key) {
@@ -696,10 +709,48 @@ impl Window {
         ));
     }
 
+    /// Shifts the current song's lyrics timing and remembers it.
+    fn nudge_lyrics(&self, delta_ms: i64) {
+        let imp = self.imp();
+
+        let key = match imp.lyrics_key.borrow().clone() {
+            Some(k) => k,
+            None => return,
+        };
+
+        let offset = cache::load_offset(&key).unwrap_or(0) + delta_ms;
+        cache::store_offset(&key, offset);
+        debug!("Lyrics offset for the current song is now {offset} ms");
+
+        for view in [imp.lyrics_view.get(), imp.fullscreen_view.lyrics_view()] {
+            view.set_offset_ms(offset);
+        }
+
+        let seconds = offset as f64 / 1000.0;
+        self.add_toast(i18n_k(
+            "Lyrics shifted by {seconds} s",
+            &[("seconds", &format!("{seconds:+.2}"))],
+        ));
+    }
+
     /// Shows lyrics, or hides the toggle entirely when there are none.
     fn apply_lyrics(&self, lyrics: Option<Lyrics>) {
         let imp = self.imp();
         let has_lyrics = lyrics.is_some();
+
+        let saved_offset = imp
+            .lyrics_key
+            .borrow()
+            .as_ref()
+            .and_then(|k| cache::load_offset(k))
+            .unwrap_or(0);
+
+        let lyrics = lyrics.map(|mut l| {
+            if saved_offset != 0 {
+                l.offset_ms = saved_offset;
+            }
+            l
+        });
 
         imp.fullscreen_view.lyrics_view().set_lyrics(lyrics.clone());
         imp.lyrics_view.set_lyrics(lyrics);
