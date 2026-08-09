@@ -106,6 +106,7 @@ mod imp {
         pub replaygain_mode: Cell<ReplayGainMode>,
 
         pub playlist_filtermodel: RefCell<Option<gio::ListModel>>,
+        pub sleep_timer: RefCell<Option<glib::SourceId>>,
 
         pub notify_playing_id: RefCell<Option<glib::SignalHandlerId>>,
         pub notify_position_id: RefCell<Option<glib::SignalHandlerId>>,
@@ -290,6 +291,7 @@ mod imp {
                 playlist_search: Cell::new(false),
                 lyrics_visible: Cell::new(false),
                 playlist_filtermodel: RefCell::default(),
+                sleep_timer: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
                 provider: gtk::CssProvider::new(),
                 settings: utils::settings_manager(),
@@ -417,6 +419,18 @@ impl Window {
             })
             .build()]);
 
+        self.add_action_entries([gio::ActionEntry::builder("sleep-timer")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .state("off".to_variant())
+            .activate(|this: &Window, action, param| {
+                let target = param
+                    .and_then(|p| p.get::<String>())
+                    .unwrap_or_else(|| "off".to_string());
+                action.set_state(&target.to_variant());
+                this.set_sleep_timer(&target);
+            })
+            .build()]);
+
         let fetch_lyrics = self.imp().settings.boolean("fetch-lyrics-online");
         self.add_action_entries([gio::ActionEntry::builder("fetch-lyrics-online")
             .state(fetch_lyrics.to_variant())
@@ -436,6 +450,45 @@ impl Window {
                 this.update_lyrics();
             })
             .build()]);
+    }
+
+    /// Arms or cancels the sleep timer. `target` is a minute count, or "off".
+    fn set_sleep_timer(&self, target: &str) {
+        let imp = self.imp();
+
+        // Re-selecting always replaces any timer already running.
+        if let Some(source) = imp.sleep_timer.take() {
+            source.remove();
+        }
+
+        let minutes: u32 = match target.parse() {
+            Ok(m) => m,
+            Err(_) => {
+                debug!("Sleep timer cancelled");
+                return;
+            }
+        };
+
+        debug!("Sleep timer armed for {minutes} minutes");
+        let source = glib::timeout_add_seconds_local_once(
+            minutes * 60,
+            clone!(
+                #[weak(rename_to = win)]
+                self,
+                move || {
+                    if let Some(player) = win.player() {
+                        player.pause();
+                    }
+                    win.imp().sleep_timer.replace(None);
+                    // Reset the menu so the timer does not look armed.
+                    if let Some(action) = win.lookup_action("sleep-timer") {
+                        action.change_state(&"off".to_variant());
+                    }
+                    win.add_toast(i18n("Playback paused by the sleep timer"));
+                }
+            ),
+        );
+        imp.sleep_timer.replace(Some(source));
     }
 
     fn fetch_lyrics_online(&self) -> bool {
