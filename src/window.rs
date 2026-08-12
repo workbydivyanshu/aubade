@@ -442,6 +442,31 @@ impl Window {
             })
             .build()]);
 
+        let discord = self.imp().settings.boolean("discord-presence");
+        self.add_action_entries([gio::ActionEntry::builder("discord-presence")
+            .state(discord.to_variant())
+            .activate(|this: &Window, action, _| {
+                let state = action.state().unwrap();
+                let action_state: bool = state.get().unwrap();
+                let discord = !action_state;
+                action.set_state(&discord.to_variant());
+
+                this.imp()
+                    .settings
+                    .set_boolean("discord-presence", discord)
+                    .expect("Unable to store setting");
+
+                if let Some(player) = this.player() {
+                    player.set_discord_enabled(discord);
+                }
+            })
+            .build()]);
+
+        // Apply the stored preference at startup.
+        if let Some(player) = self.player() {
+            player.set_discord_enabled(discord);
+        }
+
         let fetch_lyrics = self.imp().settings.boolean("fetch-lyrics-online");
         self.add_action_entries([gio::ActionEntry::builder("fetch-lyrics-online")
             .state(fetch_lyrics.to_variant())

@@ -15,8 +15,8 @@ use log::{debug, error};
 use crate::{
     application::ApplicationAction,
     audio::{
-        Controller, CoverCache, GstBackend, InhibitController, MprisController, PlayerState, Queue,
-        Song, WaveformGenerator,
+        Controller, CoverCache, DiscordController, GstBackend, InhibitController, MprisController,
+        PlayerState, Queue, Song, WaveformGenerator,
     },
 };
 
@@ -116,6 +116,7 @@ pub struct AudioPlayer {
     queue: Queue,
     state: PlayerState,
     waveform_generator: WaveformGenerator,
+    discord: DiscordController,
 }
 
 impl fmt::Debug for AudioPlayer {
@@ -140,6 +141,9 @@ impl AudioPlayer {
         let waveform_generator = WaveformGenerator::new();
         controllers.push(Box::new(waveform_generator.clone()));
 
+        let discord = DiscordController::new();
+        controllers.push(Box::new(discord.clone()));
+
         let backend = GstBackend::new(sender);
 
         let queue = Queue::default();
@@ -153,6 +157,7 @@ impl AudioPlayer {
             queue,
             state,
             waveform_generator,
+            discord,
         });
 
         res.clone().setup_channel();
@@ -456,6 +461,11 @@ impl AudioPlayer {
 
     pub fn queue(&self) -> &Queue {
         &self.queue
+    }
+
+    /// Discord Rich Presence, off unless the user turns it on.
+    pub fn set_discord_enabled(&self, enabled: bool) {
+        self.discord.set_enabled(enabled);
     }
 
     pub fn state(&self) -> &PlayerState {

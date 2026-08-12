@@ -29,5 +29,13 @@
 	      lyrics file. When disabled, Aubade makes no network requests.
 	    </description>
 	  </key>
+	  <key name="discord-presence" type="b">
+	    <default>false</default>
+	    <summary>Show what you are listening to on Discord</summary>
+	    <description>
+	      Publish the current song as a Discord status. Off by default: this
+	      broadcasts your listening to anyone who can see your profile.
+	    </description>
+	  </key>
 	</schema>
 </schemalist>
