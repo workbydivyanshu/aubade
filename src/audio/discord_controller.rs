@@ -4,7 +4,7 @@
 use std::{cell::RefCell, rc::Rc};
 
 use discord_rich_presence::{
-    activity::{Activity, Assets, Timestamps},
+    activity::{Activity, ActivityType, Assets, StatusDisplayType, Timestamps},
     DiscordIpc, DiscordIpcClient,
 };
 use log::{debug, warn};
@@ -125,6 +125,11 @@ impl DiscordController {
             .large_text(state.album.as_str());
 
         let mut activity = Activity::new()
+            // Music is "Listening to", not "Playing". Without this Discord
+            // defaults to the game-style Playing verb.
+            .activity_type(ActivityType::Listening)
+            // Show the track name in the member list rather than the app name.
+            .status_display_type(StatusDisplayType::Details)
             .details(state.title.as_str())
             .state(state.artist.as_str())
             .assets(assets);
