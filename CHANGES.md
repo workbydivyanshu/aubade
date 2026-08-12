@@ -18,6 +18,12 @@
   large synced lyrics over a blurred album-art backdrop. Lines fade with
   distance from the one currently playing.
 
+- Discord Rich Presence, off by default. Shows the current track as a Discord
+  status over the local IPC socket, with no account, token, or network request
+  of its own.
+- A sleep timer, a per-song lyrics timing offset, and seeking by clicking a
+  lyric line.
+
 ### Changed
 
 - The project is now Aubade, application id

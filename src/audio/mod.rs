@@ -22,7 +22,8 @@
 // ├── Queue: the playlist tracker GListModel
 // ├── GstBackend: a GstPlayer wrapper
 // ╰── controllers: external bits of code that interact with the state
-//     ╰── MprisController: an MPRIS wrapper
+//     ├── MprisController: an MPRIS wrapper
+//     ╰── DiscordController: Discord Rich Presence, opt-in
 //
 // The AudioPlayer object creates a glib::Sender/Receiver channel pair, and
 // passes the sender to the controllers; whenever the controllers update their
@@ -43,8 +44,10 @@ pub use controller::Controller;
 mod cover_cache;
 pub use cover_cache::CoverCache;
 
+mod discord_controller;
 mod inhibit_controller;
 mod mpris_controller;
+pub use discord_controller::DiscordController;
 pub use inhibit_controller::InhibitController;
 pub use mpris_controller::MprisController;
 
