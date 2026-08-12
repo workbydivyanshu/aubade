@@ -196,7 +196,6 @@ dependencies = [
  "ashpd",
  "async-channel",
  "color-thief",
- "discord-rich-presence",
  "futures",
  "fuzzy-matcher",
  "gdk-pixbuf",
@@ -418,21 +417,6 @@ checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
 dependencies = [
  "block-buffer",
  "crypto-common",
-]
-
-[[package]]
-name = "discord-rich-presence"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "90c55d69cab17c19677ce3a5f8face993a9e6eaf847fecac3547f3a3ff4a2494"
-dependencies = [
- "log",
- "serde",
- "serde_derive",
- "serde_json",
- "serde_repr",
- "thiserror",
- "uuid 0.8.2",
 ]
 
 [[package]]
@@ -2109,15 +2093,6 @@ checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
 name = "uuid"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
-dependencies = [
- "getrandom 0.2.17",
-]
-
-[[package]]
-name = "uuid"
 version = "1.23.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf80a72845275afea99e7f2b434723d3bc7e38470fcd1c7ed39a599c73319a53"
@@ -2413,7 +2388,7 @@ dependencies = [
  "serde_repr",
  "tracing",
  "uds_windows",
- "uuid 1.23.4",
+ "uuid",
  "windows-sys 0.61.2",
  "winnow",
  "zbus_macros 5.17.0",
