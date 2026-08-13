@@ -1,6 +1,10 @@
+use std::path::Path;
+
 use adw::subclass::prelude::*;
 use gtk::{glib, prelude::*, CompositeTemplate};
+use lofty::{prelude::TaggedFileExt, probe::Probe};
 
+use crate::audio::CoverCache;
 use crate::library::Library;
 
 mod imp {
@@ -75,9 +79,13 @@ impl OctaveHome {
         clear_box(&self.imp().recently_added_box);
         for album_index in library.recently_added_albums(12) {
             if let Some(album) = library.album(album_index) {
+                let cover_path = library
+                    .album_tracks(album_index)
+                    .first()
+                    .map(|track| track.path.as_path());
                 self.imp()
                     .recently_added_box
-                    .append(&album_card(&album.title, &album.artist));
+                    .append(&album_card(&album.title, &album.artist, cover_path));
             }
         }
 
@@ -86,7 +94,7 @@ impl OctaveHome {
             if let Some(track) = library.track(track_index) {
                 self.imp()
                     .most_played_box
-                    .append(&album_card(&track.title, &track.artist));
+                    .append(&album_card(&track.title, &track.artist, Some(&track.path)));
             }
         }
     }
@@ -98,7 +106,7 @@ fn clear_box(box_widget: &gtk::Box) {
     }
 }
 
-fn album_card(title: &str, artist: &str) -> gtk::Box {
+fn album_card(title: &str, artist: &str, cover_path: Option<&Path>) -> gtk::Box {
     let card = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
         .spacing(8)
@@ -112,6 +120,9 @@ fn album_card(title: &str, artist: &str) -> gtk::Box {
         .width_request(160)
         .height_request(160)
         .build();
+    if let Some(texture) = cover_texture(cover_path) {
+        cover.set_paintable(Some(&texture));
+    }
     cover.add_css_class("dim-label");
     card.append(&cover);
 
@@ -132,4 +143,13 @@ fn album_card(title: &str, artist: &str) -> gtk::Box {
     card.append(&artist_label);
 
     card
+}
+
+fn cover_texture(path: Option<&Path>) -> Option<gtk::gdk::Texture> {
+    let path = path?;
+    let probe = Probe::open(path).ok()?;
+    let tagged = probe.guess_file_type().ok()?.read().ok()?;
+    let tag = tagged.primary_tag().or_else(|| tagged.tags().first())?;
+    let mut cache = CoverCache::global().lock().ok()?;
+    cache.cover_art(path, tag).map(|(cover, _)| cover.texture().clone())
 }
