@@ -42,6 +42,7 @@ pub enum WindowMode {
     InitialView,
     MainView,
     FullScreen,
+    Home,
 }
 
 const ATTRIBUTE_HOST_PATH: &str = "xattr::document-portal.host-path";
@@ -74,6 +75,8 @@ mod imp {
         pub lyrics_button: TemplateChild<gtk::ToggleButton>,
         #[template_child]
         pub fullscreen_view: TemplateChild<FullScreenView>,
+        #[template_child]
+        pub octave_home: TemplateChild<crate::octave_home::OctaveHome>,
         #[template_child]
         pub fullscreen_button: TemplateChild<gtk::Button>,
         #[template_child]
@@ -251,6 +254,12 @@ mod imp {
             klass.install_action("win.leave-fullscreen", None, move |win, _, _| {
                 win.switch_mode(WindowMode::MainView);
             });
+            klass.install_action("win.show-home", None, move |win, _, _| {
+                win.switch_mode(WindowMode::Home);
+            });
+            klass.install_action("win.leave-home", None, move |win, _, _| {
+                win.switch_mode(WindowMode::MainView);
+            });
             klass.install_property_action("win.replaygain", "replaygain-mode");
 
             klass.install_action(
@@ -303,6 +312,7 @@ mod imp {
                 sleep_timer: RefCell::default(),
                 lyrics_key: RefCell::default(),
                 replaygain_mode: Cell::new(ReplayGainMode::default()),
+                octave_home: TemplateChild::default(),
                 provider: gtk::CssProvider::new(),
                 settings: utils::settings_manager(),
                 notify_playing_id: RefCell::new(None),
@@ -1759,6 +1769,14 @@ impl Window {
         let imp = self.imp();
         if let Some(display) = gdk::Display::default() {
             gtk::style_context_add_provider_for_display(&display, &imp.provider, 400);
+
+            // style.css is picked up automatically from the resource base path;
+            // the Octave sheet is not, so it needs its own provider. It sits
+            // below the recolouring one above, which has to keep the last word
+            // on anything it derives from the artwork.
+            let octave = gtk::CssProvider::new();
+            octave.load_from_resource("/io/github/workbydivyanshu/Aubade/octave.css");
+            gtk::style_context_add_provider_for_display(&display, &octave, 300);
         }
     }
 
@@ -1943,6 +1961,12 @@ impl Window {
             }
             WindowMode::FullScreen => {
                 stack.set_visible_child_name("fullscreen");
+            }
+            WindowMode::Home => {
+                self.imp()
+                    .octave_home
+                    .populate(&crate::library_state::LibraryState::global().lock().unwrap());
+                stack.set_visible_child_name("home");
             }
         };
     }

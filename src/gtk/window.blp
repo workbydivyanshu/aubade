@@ -101,6 +101,14 @@ template $AubadeWindow: Adw.ApplicationWindow {
                     }
                   }
 
+                  [start]
+                  Button home_button {
+                    icon-name: "view-queue-symbolic";
+                    tooltip-text: _("Library");
+                    action-name: "win.show-home";
+                    valign: center;
+                  }
+
                   [end]
                   ToggleButton lyrics_button {
                     icon-name: "lyrics-symbolic";
@@ -210,6 +218,32 @@ template $AubadeWindow: Adw.ApplicationWindow {
             name: "fullscreen";
 
             child: $AubadeFullScreenView fullscreen_view {};
+          }
+
+          StackPage {
+            name: "home";
+
+            child: Adw.ToolbarView {
+              [top]
+              Adw.HeaderBar {
+                show-title: false;
+
+                [start]
+                Button {
+                  icon-name: "go-previous-symbolic";
+                  tooltip-text: _("Back to the Queue");
+                  action-name: "win.leave-home";
+                  valign: center;
+                }
+              }
+
+              content: ScrolledWindow {
+                hscrollbar-policy: never;
+                vexpand: true;
+
+                child: $AubadeOctaveHome octave_home {};
+              };
+            };
           }
         };
       };
