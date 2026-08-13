@@ -1,7 +1,10 @@
 // SPDX-FileCopyrightText: 2022  Emmanuele Bassi
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use std::cell::Cell;
+use std::{
+    cell::{Cell, RefCell},
+    collections::HashSet,
+};
 
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 
@@ -17,6 +20,9 @@ mod imp {
     pub struct Queue {
         pub model: ShuffleListModel,
         pub store: gio::ListStore,
+        /// Mirrors the songs in `store` for O(1) duplicate checks. Scanning
+        /// the store per candidate made importing a library quadratic.
+        pub keys: RefCell<HashSet<String>>,
         pub repeat_mode: Cell<RepeatMode>,
         pub current_pos: Cell<Option<u32>>,
         pub shuffled: Cell<bool>,
@@ -34,6 +40,7 @@ mod imp {
             Self {
                 store,
                 model,
+                keys: RefCell::new(HashSet::new()),
                 repeat_mode: Cell::new(RepeatMode::default()),
                 current_pos: Cell::new(None),
                 shuffled: Cell::new(false),
@@ -67,6 +74,12 @@ mod imp {
             }
         }
     }
+}
+
+/// Identity used for duplicate detection, matching `Song::equals`: the uuid
+/// when the file could be hashed, otherwise the uri.
+fn song_key(song: &Song) -> String {
+    song.uuid().unwrap_or_else(|| song.uri())
 }
 
 glib::wrapper! {
@@ -131,6 +144,7 @@ impl Queue {
     pub fn add_song(&self, song: &Song) -> bool {
         if !song.equals(&Song::default()) {
             // Add song to the backing store
+            self.imp().keys.borrow_mut().insert(song_key(song));
             self.imp().store.append(song);
             self.notify("n-songs");
             true
@@ -140,6 +154,15 @@ impl Queue {
     }
 
     pub fn add_songs(&self, songs: &[impl IsA<glib::Object>]) {
+        {
+            let mut keys = self.imp().keys.borrow_mut();
+            for song in songs {
+                if let Some(song) = song.as_ref().downcast_ref::<Song>() {
+                    keys.insert(song_key(song));
+                }
+            }
+        }
+
         self.imp()
             .store
             .splice(self.imp().model.n_items(), 0, songs);
@@ -158,6 +181,7 @@ impl Queue {
                 .downcast::<Song>()
                 .unwrap();
             if s.equals(song) {
+                self.imp().keys.borrow_mut().remove(&song_key(song));
                 self.imp().store.remove(pos);
                 break;
             }
@@ -180,6 +204,7 @@ impl Queue {
         cover_cache.clear();
 
         self.imp().current_pos.replace(None);
+        self.imp().keys.borrow_mut().clear();
         self.imp().store.remove_all();
         self.notify("n-songs");
     }
@@ -316,13 +341,6 @@ impl Queue {
     }
 
     pub fn contains(&self, s: &Song) -> bool {
-        for i in 0..self.imp().store.n_items() {
-            let song = self.imp().store.item(i).unwrap();
-            if song.downcast_ref::<Song>().unwrap().equals(s) {
-                return true;
-            }
-        }
-
-        false
+        self.imp().keys.borrow().contains(&song_key(s))
     }
 }
