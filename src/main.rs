@@ -9,6 +9,7 @@ mod cover_picture;
 mod drag_overlay;
 mod fullscreen_view;
 mod i18n;
+mod library;
 mod lyrics;
 mod lyrics_view;
 mod marquee;

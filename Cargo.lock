@@ -213,6 +213,7 @@ dependencies = [
  "pretty_env_logger",
  "rand 0.10.2",
  "regex",
+ "serde",
  "serde_json",
  "sha2",
  "soup3",
