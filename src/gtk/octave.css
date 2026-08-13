@@ -1,0 +1,113 @@
+@define-color octave_page #000000;
+@define-color octave_text_primary #f5f5f7;
+@define-color octave_text_muted #a3a3ad;
+@define-color octave_text_dim #6b6b76;
+@define-color octave_accent #fb2c5a;
+@define-color octave_accent_soft #ff6f8b;
+@define-color octave_glow_warm #fb2c5a;
+@define-color octave_glow_cool #7850ff;
+@define-color octave_glass_subtle #ffffff;
+@define-color octave_glass_default #12141b;
+@define-color octave_glass_bar #07080b;
+@define-color octave_glass_floating #12141c;
+@define-color octave_glass_strong #101219;
+@define-color octave_white #ffffff;
+@define-color octave_black #000000;
+
+.octave-glass-subtle {
+  background-color: alpha(@octave_glass_subtle, 0.06);
+  border: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-glass-default {
+  background-color: alpha(@octave_glass_default, 0.42);
+  border: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-glass-bar {
+  background-color: alpha(@octave_glass_bar, 0.52);
+  border: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-glass-floating {
+  background-color: alpha(@octave_glass_floating, 0.44);
+  border: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-glass-strong {
+  background-color: alpha(@octave_glass_strong, 0.48);
+  border: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-pill {
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+}
+
+.octave-circular-sm,
+.octave-circular-md,
+.octave-circular-lg {
+  border-radius: 9999px;
+}
+
+.octave-circular-sm {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.octave-circular-md {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.octave-circular-lg {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.octave-heading {
+  color: @octave_text_primary;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.9px;
+}
+
+.octave-body {
+  color: @octave_text_primary;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+}
+
+.octave-muted {
+  color: @octave_text_muted;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+}
+
+.octave-dim {
+  color: @octave_text_dim;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+}
+
+.octave-card {
+  background-color: alpha(@octave_glass_default, 0.42);
+  border: 1px solid alpha(@octave_white, 0.08);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.18), inset 0 -1px 0 alpha(@octave_black, 0.20);
+}
+
+.octave-accent {
+  background-color: @octave_accent;
+  color: @octave_text_primary;
+}
