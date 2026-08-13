@@ -23,8 +23,8 @@ use std::{
 use log::{debug, warn};
 use serde::{Deserialize, Serialize};
 
-pub use scan::{now_secs, ScanStats};
-pub use track::{fold_key, Track, UNKNOWN_ALBUM, UNKNOWN_ARTIST};
+pub use scan::{scan, ScanStats};
+pub use track::{fold_key, Track};
 
 /// Bumped when the on-disk shape changes in a way old files cannot satisfy.
 /// A mismatch throws the index away and rescans rather than guessing.

@@ -12,7 +12,7 @@ use std::{
 use adw::subclass::prelude::*;
 use glib::{clone, closure_local};
 use gtk::{gdk, gio, glib, prelude::*, CompositeTemplate};
-use log::debug;
+use log::{debug, warn};
 
 use crate::{
     audio::{AudioPlayer, RepeatMode, ReplayGainMode, Song},
@@ -20,6 +20,7 @@ use crate::{
     drag_overlay::DragOverlay,
     fullscreen_view::FullScreenView,
     i18n::{i18n, i18n_k, ni18n_f, ni18n_k},
+    library, library_state,
     lyrics::{
         cache, loader,
         provider::{ProviderResult, TrackQuery},
@@ -216,6 +217,7 @@ mod imp {
                         win.add_toast(i18n("Unable to access files"));
                     } else {
                         win.add_files_to_queue(&files);
+                        win.add_library_roots(&files);
                     }
                 }
             });
@@ -1763,6 +1765,76 @@ impl Window {
                     .expect("Failed to activate action");
             }
         }
+    }
+
+    /// Remembers the folders the listener picked, and indexes them.
+    ///
+    /// Adding a folder to the queue is the only moment the app is told where
+    /// music actually lives, so it is also the moment the library learns it.
+    fn add_library_roots(&self, files: &gio::ListModel) {
+        let mut added = false;
+        {
+            let mut library = library_state::LibraryState::global().lock().unwrap();
+            for i in 0..files.n_items() {
+                if let Some(file) = files.item(i).and_downcast::<gio::File>() {
+                    if let Some(path) = file.path() {
+                        added |= library.add_root(path);
+                    }
+                }
+            }
+        }
+
+        if added {
+            self.rescan_library();
+        }
+    }
+
+    /// Reads tags for every root, off the main thread.
+    ///
+    /// A scan of several thousand files takes seconds, so doing it inline
+    /// would freeze the window for the whole of it. The work happens on a
+    /// plain thread and only the finished track list comes back.
+    fn rescan_library(&self) {
+        let (roots, known) = {
+            let library = library_state::LibraryState::global().lock().unwrap();
+            (library.roots().to_vec(), library.tracks().to_vec())
+        };
+
+        let (sender, receiver) = async_channel::bounded(1);
+        std::thread::spawn(move || {
+            let (tracks, stats) = library::scan(&roots, &known, |_, _| {});
+            if sender.send_blocking((tracks, stats)).is_err() {
+                debug!("Nothing left listening for the scan result");
+            }
+        });
+
+        glib::MainContext::default().spawn_local(clone!(
+            #[weak(rename_to = win)]
+            self,
+            async move {
+                if let Ok((tracks, stats)) = receiver.recv().await {
+                    debug!(
+                        "Library scan: {} added, {} updated, {} removed",
+                        stats.added, stats.updated, stats.removed
+                    );
+
+                    let mut library = library_state::LibraryState::global().lock().unwrap();
+                    library.adopt(tracks);
+                    if let Err(e) = library.save() {
+                        warn!("Unable to save the library index: {}", e);
+                    }
+                    drop(library);
+
+                    // The shelves are only built on entry, so refresh them if
+                    // the listener is looking at them right now.
+                    if win.imp().main_stack.visible_child_name().as_deref() == Some("home") {
+                        win.imp()
+                            .octave_home
+                            .populate(&library_state::LibraryState::global().lock().unwrap());
+                    }
+                }
+            }
+        ));
     }
 
     fn setup_provider(&self) {
