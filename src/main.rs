@@ -13,6 +13,7 @@ mod library;
 mod lyrics;
 mod lyrics_view;
 mod marquee;
+mod octave_home;
 mod playback_control;
 mod playlist_view;
 mod queue_row;

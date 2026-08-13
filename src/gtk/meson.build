@@ -5,6 +5,7 @@ blueprints = custom_target('blueprints',
   input: files(
     'fullscreen-view.blp',
     'lyrics-view.blp',
+    'octave-home.blp',
     'playback-control.blp',
     'playlist-view.blp',
     'queue-row.blp',

@@ -1,0 +1,64 @@
+using Gtk 4.0;
+
+template $AubadeOctaveHome: Widget {
+  Box {
+    orientation: vertical;
+    spacing: 24;
+    margin-top: 32;
+    margin-bottom: 32;
+    margin-start: 32;
+    margin-end: 32;
+
+    Label greeting_label {
+      xalign: 0;
+
+      styles [
+        "octave-heading",
+      ]
+    }
+
+    Label recently_added_heading {
+      xalign: 0;
+      label: _("Recently added");
+
+      styles [
+        "octave-body",
+      ]
+    }
+
+    ScrolledWindow recently_added_scrolled_window {
+      hscrollbar-policy: external;
+      vscrollbar-policy: never;
+      min-content-height: 234;
+      max-content-height: 234;
+      propagate-natural-height: true;
+
+      child: Box recently_added_box {
+        spacing: 16;
+        orientation: horizontal;
+      };
+    }
+
+    Label most_played_heading {
+      xalign: 0;
+      label: _("Most played");
+
+      styles [
+        "octave-body",
+      ]
+    }
+
+    ScrolledWindow most_played_scrolled_window {
+      hscrollbar-policy: external;
+      vscrollbar-policy: never;
+      min-content-height: 234;
+      max-content-height: 234;
+      propagate-natural-height: true;
+
+      child: Box most_played_box {
+        spacing: 16;
+        orientation: horizontal;
+      };
+    }
+  }
+}

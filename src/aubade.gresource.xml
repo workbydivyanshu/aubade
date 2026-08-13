@@ -23,9 +23,11 @@
   </gresource>
   <gresource prefix="/io/github/workbydivyanshu/Aubade">
     <file alias="style.css">gtk/style.css</file>
+    <file alias="octave.css">gtk/octave.css</file>
     <!-- All UI files are generated in the builddir/src/gtk directory -->
     <file preprocess="xml-stripblanks">fullscreen-view.ui</file>
     <file preprocess="xml-stripblanks">lyrics-view.ui</file>
+    <file preprocess="xml-stripblanks">octave-home.ui</file>
     <file preprocess="xml-stripblanks">playback-control.ui</file>
     <file preprocess="xml-stripblanks">playlist-view.ui</file>
     <file preprocess="xml-stripblanks">queue-row.ui</file>
