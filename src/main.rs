@@ -10,6 +10,7 @@ mod drag_overlay;
 mod fullscreen_view;
 mod i18n;
 mod library;
+mod library_state;
 mod lyrics;
 mod lyrics_view;
 mod marquee;

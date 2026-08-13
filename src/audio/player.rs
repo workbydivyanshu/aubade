@@ -10,6 +10,7 @@ use std::{
 use async_channel::{Receiver, Sender};
 use glib::clone;
 use gtk::glib;
+use gtk::prelude::FileExt;
 use log::{debug, error};
 
 use crate::{
@@ -186,7 +187,14 @@ impl AudioPlayer {
             PlaybackAction::SkipNext => self.skip_next(),
             PlaybackAction::UpdatePosition(pos, notify) => self.update_position(pos, notify),
             PlaybackAction::VolumeChanged(vol) => self.update_volume(vol),
-            PlaybackAction::PlayNext => self.play_next(),
+            PlaybackAction::PlayNext => {
+                if let Some(song) = self.state.current_song() {
+                    if let Some(path) = song.file().path() {
+                        crate::library_state::LibraryState::global().lock().unwrap().mark_played(&path);
+                    }
+                }
+                self.play_next()
+            },
             PlaybackAction::Raise => self.present(),
             PlaybackAction::Repeat(mode) => self.update_repeat_mode(mode),
             PlaybackAction::Seek(offset) => self.seek_offset(offset),

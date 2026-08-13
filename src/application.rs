@@ -90,6 +90,17 @@ mod imp {
             self.parent_startup();
 
             gtk::Window::set_default_icon_name(APPLICATION_ID);
+            
+            let loaded = crate::library::Library::load();
+            *crate::library_state::LibraryState::global().lock().unwrap() = loaded;
+            // TODO: rescan() blocks. Run on a worker thread if needed.
+        }
+
+        fn shutdown(&self) {
+            if let Err(e) = crate::library_state::LibraryState::global().lock().unwrap().save() {
+                log::warn!("Failed to save library: {}", e);
+            }
+            self.parent_shutdown();
         }
 
         fn activate(&self) {
