@@ -8,7 +8,8 @@ template $AubadeWindow: Adw.ApplicationWindow {
   handle-menubar-accel: true;
   width-request: 360;
   height-request: 660;
-  default-width: 800;
+  default-width: 1200;
+  default-height: 820;
 
   content: WindowHandle {
     $DragOverlay drag_overlay {
@@ -80,13 +81,131 @@ template $AubadeWindow: Adw.ApplicationWindow {
           StackPage {
             name: "main-view";
 
-            child: Adw.OverlaySplitView split_view {
-              max-sidebar-width: 330;
-              sidebar-width-fraction: 0.4;
+            child: Box {
+              orientation: horizontal;
 
-              content: Adw.ToolbarView {
-                [top]
-                Adw.HeaderBar {
+              Box octave_sidebar {
+                orientation: vertical;
+                width-request: 256;
+                spacing: 4;
+
+                styles [
+                  "octave-sidebar",
+                ]
+
+                Box {
+                  spacing: 10;
+                  margin-start: 16;
+                  margin-end: 16;
+                  margin-top: 18;
+                  margin-bottom: 12;
+
+                  Label {
+                    label: "Aubade";
+                    xalign: 0;
+                    hexpand: true;
+
+                    styles [
+                      "octave-wordmark",
+                    ]
+                  }
+                }
+
+                Button {
+                  action-name: "win.show-home";
+
+                  styles [
+                    "flat",
+                    "octave-nav-row",
+                  ]
+
+                  child: Box {
+                    spacing: 14;
+
+                    Image {
+                      icon-name: "go-home-symbolic";
+                    }
+
+                    Label {
+                      label: _("Home");
+                      xalign: 0;
+                      hexpand: true;
+                    }
+                  };
+                }
+
+                Button {
+                  action-name: "win.leave-home";
+
+                  styles [
+                    "flat",
+                    "octave-nav-row",
+                  ]
+
+                  child: Box {
+                    spacing: 14;
+
+                    Image {
+                      icon-name: "view-queue-symbolic";
+                    }
+
+                    Label {
+                      label: _("Now Playing");
+                      xalign: 0;
+                      hexpand: true;
+                    }
+                  };
+                }
+
+                Separator {
+                  margin-start: 16;
+                  margin-end: 16;
+                  margin-top: 12;
+                  margin-bottom: 12;
+                }
+
+                Label {
+                  label: _("LIBRARY");
+                  xalign: 0;
+                  margin-start: 20;
+                  margin-bottom: 4;
+
+                  styles [
+                    "octave-section-label",
+                  ]
+                }
+
+                Label sidebar_stats {
+                  xalign: 0;
+                  margin-start: 20;
+                  margin-end: 16;
+                  wrap: true;
+                  vexpand: true;
+                  valign: start;
+
+                  styles [
+                    "octave-meta",
+                  ]
+                }
+
+                Label {
+                  label: "Aubade";
+                  margin-bottom: 16;
+
+                  styles [
+                    "octave-credit",
+                  ]
+                }
+              }
+
+              Adw.OverlaySplitView split_view {
+                hexpand: true;
+                max-sidebar-width: 330;
+                sidebar-width-fraction: 0.4;
+
+                content: Adw.ToolbarView {
+                  [top]
+                  Adw.HeaderBar {
                   show-title: false;
 
                   [end]
@@ -121,9 +240,9 @@ template $AubadeWindow: Adw.ApplicationWindow {
                       label: C_("a11y", "Show lyrics");
                     }
                   }
-                }
+                  }
 
-                content: Box main_box {
+                  content: Box main_box {
                   orientation: vertical;
                   valign: center;
                   vexpand: true;
@@ -207,10 +326,11 @@ template $AubadeWindow: Adw.ApplicationWindow {
                     margin-top: "0";
                     margin-bottom: "24";
                   }
+                  };
                 };
-              };
 
-              sidebar: $AubadePlaylistView playlist_view {};
+                sidebar: $AubadePlaylistView playlist_view {};
+              }
             };
           }
 
@@ -245,6 +365,7 @@ template $AubadeWindow: Adw.ApplicationWindow {
               };
             };
           }
+
         };
       };
     }

@@ -111,3 +111,174 @@
   background-color: @octave_accent;
   color: @octave_text_primary;
 }
+
+/* ── Shell ─────────────────────────────────────────────────────────────── */
+
+.octave-page {
+  background-color: @octave_page;
+  background-image:
+    radial-gradient(circle at 0% 0%, alpha(@octave_glow_warm, 0.22), transparent 55%),
+    radial-gradient(circle at 100% 0%, alpha(@octave_glow_cool, 0.18), transparent 55%);
+}
+
+.octave-sidebar {
+  background-color: alpha(#252526, 0.4);
+  border-right: 1px solid alpha(@octave_white, 0.06);
+}
+
+.octave-wordmark {
+  color: @octave_text_primary;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+
+/* Nav rows are pills, not rectangles; the selected one fills, and only its
+   icon takes the accent. Colouring the label too makes it shout. */
+.octave-nav-row {
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: @octave_text_primary;
+  padding: 0 14px;
+  min-height: 43px;
+}
+
+.octave-nav-row:hover {
+  background-color: alpha(@octave_white, 0.06);
+}
+
+.octave-nav-row:checked,
+.octave-nav-row.selected {
+  background-color: #1c1c20;
+}
+
+.octave-nav-row:checked image,
+.octave-nav-row.selected image {
+  color: @octave_accent;
+}
+
+.octave-section-label {
+  color: @octave_text_dim;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+}
+
+.octave-topbar {
+  min-height: 56px;
+  background-color: transparent;
+}
+
+.octave-credit {
+  color: @octave_text_dim;
+  font-size: 12px;
+}
+
+/* ── Shelves and cards ─────────────────────────────────────────────────── */
+
+.octave-shelf {
+  padding: 0 4px 8px 4px;
+}
+
+.octave-shelf-title {
+  color: @octave_text_primary;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+}
+
+.octave-shelf-subtitle {
+  color: @octave_text_muted;
+  font-size: 14px;
+}
+
+/* An eyebrow: small, spaced capitals above a title. */
+.octave-eyebrow {
+  color: @octave_text_muted;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+}
+
+.octave-quick-link {
+  background-color: alpha(@octave_white, 0.06);
+  border-radius: 10px;
+  min-height: 56px;
+}
+
+.octave-quick-link:hover {
+  background-color: alpha(@octave_white, 0.10);
+}
+
+.octave-hero {
+  border-radius: 16px;
+}
+
+.octave-hero-title {
+  color: @octave_text_primary;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+}
+
+/* ── Album page ────────────────────────────────────────────────────────── */
+
+.octave-album-cover {
+  border-radius: 24px;
+  box-shadow: 0 18px 48px alpha(@octave_black, 0.55);
+}
+
+.octave-meta {
+  color: @octave_text_muted;
+  font-size: 14px;
+}
+
+.octave-track-row {
+  border-radius: 28px;
+  min-height: 52px;
+  padding: 0 16px;
+}
+
+.octave-track-row:hover {
+  background-color: alpha(@octave_white, 0.06);
+}
+
+/* ── Controls ──────────────────────────────────────────────────────────── */
+
+/* The one loud element on the page. Its colour is replaced at runtime with
+   one sampled from the artwork, which is why every record looks like itself. */
+.octave-play-pill {
+  background-color: @octave_accent;
+  color: #ffffff;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 48px;
+  padding: 0 22px;
+  border: none;
+  box-shadow: 0 6px 18px alpha(@octave_accent, 0.35);
+}
+
+.octave-play-pill:hover {
+  background-color: shade(@octave_accent, 1.1);
+}
+
+.octave-icon-button {
+  background-color: alpha(@octave_white, 0.10);
+  border-radius: 9999px;
+  min-width: 48px;
+  min-height: 48px;
+  border: none;
+  color: @octave_text_primary;
+}
+
+.octave-icon-button:hover {
+  background-color: alpha(@octave_white, 0.16);
+}
+
+.octave-player-bar {
+  background-color: alpha(#07080b, 0.52);
+  border-top: 1px solid alpha(@octave_white, 0.08);
+  box-shadow: inset 0 1px 0 alpha(@octave_white, 0.10);
+}
