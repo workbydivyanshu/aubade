@@ -21,119 +21,228 @@ template $AubadeFullScreenView: Widget {
     }
 
     [overlay]
-    Box {
+    Box content {
       orientation: vertical;
+      spacing: 12;
+      margin-start: 42;
+      margin-end: 42;
+      margin-top: 24;
+      margin-bottom: 30;
       hexpand: true;
       vexpand: true;
 
-      Box {
-        spacing: 12;
-        margin-start: 28;
-        margin-end: 28;
-        margin-top: 22;
-        margin-bottom: 8;
+      CenterBox header {
+        margin-bottom: 10;
 
-        Image cover_thumb {
-          pixel-size: 56;
-          overflow: hidden;
+        [start]
+        Button {
+          icon-name: "go-previous-symbolic";
+          tooltip-text: _("Leave Full Screen");
+          action-name: "win.leave-fullscreen";
 
           styles [
-            "card",
+            "octave-icon-button",
           ]
         }
 
-        Box {
-          orientation: vertical;
-          valign: center;
-          hexpand: true;
-
-          Label title_label {
-            xalign: 0;
-            ellipsize: end;
-
-            styles [
-              "fullscreen-title",
-            ]
-          }
-
-          Label artist_label {
-            xalign: 0;
-            ellipsize: end;
-
-            styles [
-              "fullscreen-artist",
-            ]
-          }
-        }
-      }
-
-      $AubadeLyricsView lyrics_view {
-        hexpand: true;
-        vexpand: true;
-
-        styles [
-          "fullscreen",
-        ]
-      }
-
-      CenterBox {
-        margin-start: 28;
-        margin-end: 28;
-        margin-top: 10;
-        margin-bottom: 22;
-
         [center]
         Box {
-          spacing: 18;
+          orientation: vertical;
+          spacing: 3;
           halign: center;
 
-          Button {
-            icon-name: "media-skip-backward-symbolic";
-            tooltip-text: _("Previous");
-            action-name: "win.previous";
-            valign: center;
+          Label {
+            label: _("NOW PLAYING");
+            halign: center;
 
             styles [
-              "circular",
-              "flat",
+              "octave-eyebrow",
             ]
           }
 
-          Button fullscreen_play_button {
-            icon-name: "media-playback-start-symbolic";
-            tooltip-text: _("Play");
-            action-name: "win.play";
-            valign: center;
+          Label header_title_label {
+            ellipsize: end;
+            max-width-chars: 36;
+            halign: center;
 
             styles [
-              "circular",
-            ]
-          }
-
-          Button {
-            icon-name: "media-skip-forward-symbolic";
-            tooltip-text: _("Next");
-            action-name: "win.next";
-            valign: center;
-
-            styles [
-              "circular",
-              "flat",
+              "octave-body",
             ]
           }
         }
 
         [end]
         Button {
-          icon-name: "go-previous-symbolic";
-          tooltip-text: _("Leave Full Screen");
-          action-name: "win.leave-fullscreen";
-          valign: center;
+          icon-name: "open-menu-symbolic";
+          tooltip-text: _("More Options");
 
           styles [
-            "circular",
-            "flat",
+            "octave-icon-button",
           ]
+        }
+      }
+
+      Box main_content {
+        orientation: horizontal;
+        spacing: 42;
+        hexpand: true;
+        vexpand: true;
+
+        Box left_column {
+          orientation: vertical;
+          spacing: 18;
+          width-request: 430;
+          halign: center;
+          valign: center;
+          hexpand: true;
+          vexpand: true;
+
+          Image cover_thumb {
+            width-request: 360;
+            height-request: 360;
+            halign: center;
+            valign: center;
+            overflow: hidden;
+
+            styles [
+              "octave-album-cover",
+            ]
+          }
+
+          Box track_details {
+            orientation: vertical;
+            spacing: 5;
+            halign: fill;
+            hexpand: true;
+
+            Label title_label {
+              xalign: 0;
+              ellipsize: end;
+
+              styles [
+                "octave-hero-title",
+              ]
+            }
+
+            Label artist_label {
+              xalign: 0;
+              ellipsize: end;
+
+              styles [
+                "octave-muted",
+              ]
+            }
+          }
+
+          Box scrubber_row {
+            orientation: vertical;
+            spacing: 4;
+            hexpand: true;
+
+            Scale scrubber {
+              draw-value: false;
+              hexpand: true;
+
+              styles [
+                "fullscreen-scrubber",
+              ]
+            }
+
+            Box {
+              spacing: 12;
+              hexpand: true;
+
+              Label elapsed_label {
+                label: "0:00";
+                xalign: 0;
+                hexpand: true;
+
+                styles [
+                  "octave-meta",
+                ]
+              }
+
+              Label remaining_label {
+                label: "−0:00";
+                xalign: 1;
+
+                styles [
+                  "octave-meta",
+                ]
+              }
+            }
+          }
+
+          Box transport {
+            spacing: 14;
+            halign: center;
+            margin-top: 4;
+
+            ToggleButton {
+              icon-name: "media-playlist-shuffle-symbolic";
+              action-name: "queue.shuffle";
+              tooltip-text: _("Shuffle");
+
+              styles [
+                "octave-icon-button",
+              ]
+            }
+
+            Button {
+              icon-name: "media-skip-backward-symbolic";
+              tooltip-text: _("Previous");
+              action-name: "win.previous";
+
+              styles [
+                "octave-icon-button",
+              ]
+            }
+
+            Button fullscreen_play_button {
+              icon-name: "media-playback-start-symbolic";
+              tooltip-text: _("Play");
+              action-name: "win.play";
+
+              styles [
+                "fullscreen-play-button",
+              ]
+            }
+
+            Button {
+              icon-name: "media-skip-forward-symbolic";
+              tooltip-text: _("Next");
+              action-name: "win.next";
+
+              styles [
+                "octave-icon-button",
+              ]
+            }
+
+            Button {
+              icon-name: "media-playlist-consecutive-symbolic";
+              tooltip-text: _("Repeat");
+              action-name: "queue.repeat-mode";
+
+              styles [
+                "octave-icon-button",
+              ]
+            }
+          }
+        }
+
+        Box lyrics_column {
+          hexpand: true;
+          vexpand: true;
+          valign: fill;
+
+          $AubadeLyricsView lyrics_view {
+            hexpand: true;
+            vexpand: true;
+
+            styles [
+              "fullscreen",
+            ]
+          }
         }
       }
     }

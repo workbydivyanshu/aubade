@@ -1663,11 +1663,12 @@ impl Window {
             self.update_style(state.current_song().as_ref());
 
             match state.current_song() {
-                Some(song) => self
-                    .imp()
-                    .fullscreen_view
-                    .set_details(&song.title(), &song.artist()),
-                None => self.imp().fullscreen_view.set_details("", ""),
+                Some(song) => self.imp().fullscreen_view.set_details(
+                    &song.title(),
+                    &song.album(),
+                    &song.artist(),
+                ),
+                None => self.imp().fullscreen_view.set_details("", "", ""),
             }
         }
     }
@@ -1840,7 +1841,9 @@ impl Window {
     fn setup_provider(&self) {
         let imp = self.imp();
         if let Some(display) = gdk::Display::default() {
-            gtk::style_context_add_provider_for_display(&display, &imp.provider, 400);
+            // Above libadwaita's own sheet, which sits at 600; anything below
+            // that loses to the toolkit's accent colour.
+            gtk::style_context_add_provider_for_display(&display, &imp.provider, 800);
 
             // style.css is picked up automatically from the resource base path;
             // the Octave sheet is not, so it needs its own provider. It sits
@@ -1848,7 +1851,7 @@ impl Window {
             // on anything it derives from the artwork.
             let octave = gtk::CssProvider::new();
             octave.load_from_resource("/io/github/workbydivyanshu/Aubade/octave.css");
-            gtk::style_context_add_provider_for_display(&display, &octave, 300);
+            gtk::style_context_add_provider_for_display(&display, &octave, 700);
         }
     }
 
@@ -2064,6 +2067,8 @@ impl Window {
     }
 
     pub fn set_song_time(&self, elapsed: Option<u64>, remaining: Option<u64>) {
+        self.imp().fullscreen_view.set_time(elapsed, remaining);
+
         if let Some(elapsed) = elapsed {
             self.imp()
                 .elapsed_label
@@ -2082,6 +2087,7 @@ impl Window {
     }
 
     pub fn set_song_position(&self, position: f64) {
+        self.imp().fullscreen_view.set_position(position);
         self.imp().waveform_view.set_position(position);
     }
 }

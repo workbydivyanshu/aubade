@@ -8,3 +8,5 @@ subprojects/blueprint-compiler
 
 # Local agent state
 .omc/
+.codegraph/
+.omx/

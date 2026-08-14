@@ -1,3 +1,15 @@
+/* Libadwaita ships its own accent and it wins over anything set on a widget,
+   so the whole palette has to be redefined here or every suggested control
+   stays the toolkit's purple. */
+@define-color accent_bg_color #fb2c5a;
+@define-color accent_color #ff6f8b;
+@define-color accent_fg_color #ffffff;
+@define-color window_bg_color #000000;
+@define-color view_bg_color #000000;
+@define-color headerbar_bg_color #000000;
+@define-color popover_bg_color #16181f;
+@define-color card_bg_color #12141b;
+
 @define-color octave_page #000000;
 @define-color octave_text_primary #f5f5f7;
 @define-color octave_text_muted #a3a3ad;
@@ -275,6 +287,40 @@
 
 .octave-icon-button:hover {
   background-color: alpha(@octave_white, 0.16);
+}
+
+.fullscreen-play-button {
+  background-color: @octave_white;
+  border-radius: 18px;
+  color: @octave_black;
+  min-width: 64px;
+  min-height: 64px;
+}
+
+.fullscreen-play-button:hover {
+  background-color: alpha(@octave_white, 0.86);
+}
+
+.fullscreen-scrubber {
+  min-height: 6px;
+}
+
+.fullscreen-scrubber trough {
+  background-color: alpha(@octave_white, 0.20);
+  border-radius: 9999px;
+  min-height: 5px;
+}
+
+.fullscreen-scrubber highlight {
+  background-color: @octave_white;
+  border-radius: 9999px;
+}
+
+.fullscreen-scrubber slider {
+  background-color: @octave_white;
+  border-radius: 9999px;
+  min-width: 14px;
+  min-height: 14px;
 }
 
 .octave-player-bar {
