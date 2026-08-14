@@ -130,6 +130,57 @@ palette from cover art in `src/audio/cover_cache.rs`, so this is reproducible
 rather than aspirational — and it matters more than any single measurement
 here, because it is what stops the app looking the same for every album.
 
+### Now playing
+
+The screen Aubade is closest to already, and the one worth taking first.
+
+Split down the middle. Artwork and transport on the left, **lyrics on the
+right, set enormous** — roughly 44px, bold, the current line at full white and
+the rest at about 30%. The whole background is the artwork, scaled far past the
+window and blurred into a soft wash.
+
+- Header: a collapse chevron at the left, `NOW PLAYING` in spaced caps centred
+  with the track beneath it, an overflow menu at the right.
+- Cover about 410px square, radius ~24px, with a shadow.
+- Title ~48px/700 with an explicit badge beside it; below, the release and
+  artist on one muted line; share and like sit opposite.
+- Elapsed at the left of the scrubber, **remaining as a negative** (`-2:15`) at
+  the right.
+- Under the scrubber, a quality menu and a **playback speed** control (`1x`).
+- Transport: shuffle, previous, then a large **rounded-square** play/pause —
+  not a circle — then next and repeat.
+- Bottom row: an output picker reading `This device`, a volume slider, and
+  toggles for miniplayer, lyrics, karaoke and queue.
+- The lyrics pane carries a `Sync` control with a minus button: a per-song
+  timing offset.
+
+Aubade already has the blurred backdrop, synced lyrics with distance fading,
+click-to-seek and an offset nudge. This screen is mostly rearrangement of
+things that exist, which is why it is cheaper than it looks.
+
+### Player bar
+
+Docked across the bottom on every page except the expanded view above.
+
+- Left: a ~56px rounded cover, title at 15px, artist at 13px muted, an expand
+  chevron, then like and share.
+- Centre: shuffle, previous, a white filled circular play at ~48px, next,
+  repeat. Beneath them the scrubber, elapsed and total flanking it, the filled
+  portion in the accent colour.
+- Right: output, queue, volume with slider, miniplayer, and a full-screen
+  expand.
+
+### Settings
+
+Reachable from the account control, not from the nav — there is no link to it
+in the sidebar.
+
+Stacked cards, radius ~16px, dark fill, hairline border. Each opens with a
+coloured icon beside a title, then rows of a label with an explanatory line
+beneath and a control aligned right. Destructive actions (`Reset`) use a
+red-tinted pill rather than a plain one. A version line and a few links close
+the page.
+
 ## Structure of the home view
 
 A greeting that changes with the hour, a scope switch (Global/Local) and region
