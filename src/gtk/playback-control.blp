@@ -5,13 +5,34 @@ using Gtk 4.0;
 
 template $AubadePlaybackControl: Widget {
   Box center_box {
-    orientation: vertical;
-    spacing: 6;
-    width-request: 256;
+    orientation: horizontal;
+    spacing: 8;
+    hexpand: true;
+
+    Box start_box {
+      spacing: 4;
+      valign: center;
+
+      ToggleButton shuffle_button {
+        icon-name: "media-playlist-shuffle-symbolic";
+        action-name: "queue.shuffle";
+        tooltip-text: _("Shuffle the Playlist");
+
+        accessibility {
+          label: C_("a11y", "Shuffle");
+        }
+
+        styles [
+          "flat",
+          "octave-circular-md",
+        ]
+      }
+    }
 
     Box controls_box {
-      spacing: 24;
+      spacing: 8;
       halign: center;
+      valign: center;
       hexpand: true;
 
       Button previous_button {
@@ -21,7 +42,8 @@ template $AubadePlaybackControl: Widget {
         tooltip-text: _("Play the Previous Song");
 
         styles [
-          "circular",
+          "flat",
+          "octave-circular-md",
         ]
 
         accessibility {
@@ -52,7 +74,8 @@ template $AubadePlaybackControl: Widget {
         tooltip-text: _("Play the Next Song");
 
         styles [
-          "circular",
+          "flat",
+          "octave-circular-md",
         ]
 
         accessibility {
@@ -61,87 +84,65 @@ template $AubadePlaybackControl: Widget {
       }
     }
 
-    $AubadeVolumeControl volume_control {
-      hexpand: "true";
+    Box end_box {
+      spacing: 4;
+      valign: center;
+
+      Button repeat_button {
+        icon-name: "media-playlist-consecutive-symbolic";
+        action-name: "queue.repeat-mode";
+        valign: center;
+        tooltip-text: _("Enable Repeat");
+
+        styles [
+          "flat",
+          "octave-circular-md",
+        ]
+
+        accessibility {
+          label: C_("a11y", "Repeat");
+        }
+      }
+
+      ToggleButton playlist_button {
+        icon-name: "view-queue-symbolic";
+        action-name: "queue.toggle";
+        valign: center;
+        tooltip-text: _("Toggle Playlist");
+
+        styles [
+          "flat",
+          "octave-circular-md",
+        ]
+
+        accessibility {
+          label: C_("a11y", "Toggle playlist");
+        }
+      }
+
+      MenuButton menu_button {
+        menu-model: primary_menu;
+        icon-name: "open-menu-symbolic";
+        primary: true;
+        valign: center;
+        tooltip-text: _("Main Menu");
+        direction: up;
+
+        styles [
+          "flat",
+          "octave-circular-md",
+        ]
+
+        accessibility {
+          label: C_("a11y", "Primary menu");
+        }
+      }
     }
 
-    CenterBox {
-      [start]
-      Box start_box {
-        halign: start;
-        spacing: 12;
-        margin-end: 18;
-
-        ToggleButton playlist_button {
-          icon-name: "view-queue-symbolic";
-          action-name: "queue.toggle";
-          valign: center;
-          tooltip-text: _("Toggle Playlist");
-
-          styles [
-            "circular",
-          ]
-
-          accessibility {
-            label: C_("a11y", "Toggle playlist");
-          }
-        }
-
-        ToggleButton shuffle_button {
-          icon-name: "media-playlist-shuffle-symbolic";
-          action-name: "queue.shuffle";
-          valign: center;
-          tooltip-text: _("Shuffle the Playlist");
-
-          accessibility {
-            label: C_("a11y", "Shuffle");
-          }
-
-          styles [
-            "circular",
-          ]
-        }
-      }
-
-      [end]
-      Box end_box {
-        halign: end;
-        spacing: 12;
-        margin-start: 18;
-
-        Button repeat_button {
-          icon-name: "media-playlist-consecutive-symbolic";
-          action-name: "queue.repeat-mode";
-          valign: center;
-          tooltip-text: _("Enable Repeat");
-
-          styles [
-            "circular",
-          ]
-
-          accessibility {
-            label: C_("a11y", "Repeat");
-          }
-        }
-
-        MenuButton menu_button {
-          menu-model: primary_menu;
-          icon-name: "open-menu-symbolic";
-          primary: true;
-          halign: end;
-          valign: center;
-          tooltip-text: _("Main Menu");
-          direction: up;
-
-          styles [
-            "circular",
-          ]
-
-          accessibility {
-            label: C_("a11y", "Primary menu");
-          }
-        }
-      }
+    $AubadeVolumeControl volume_control {
+      width-request: 136;
+      hexpand: false;
+      valign: center;
     }
   }
 }

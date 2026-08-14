@@ -79,6 +79,8 @@ mod imp {
         #[template_child]
         pub octave_home: TemplateChild<crate::octave_home::OctaveHome>,
         #[template_child]
+        pub content_stack: TemplateChild<gtk::Stack>,
+        #[template_child]
         pub fullscreen_button: TemplateChild<gtk::Button>,
         #[template_child]
         pub song_details: TemplateChild<SongDetails>,
@@ -91,7 +93,7 @@ mod imp {
         #[template_child]
         pub playback_control: TemplateChild<PlaybackControl>,
         #[template_child]
-        pub split_view: TemplateChild<adw::OverlaySplitView>,
+        pub split_view: TemplateChild<gtk::Box>,
         #[template_child]
         pub playlist_view: TemplateChild<PlaylistView>,
         #[template_child]
@@ -260,6 +262,7 @@ mod imp {
                 win.switch_mode(WindowMode::Home);
             });
             klass.install_action("win.leave-home", None, move |win, _, _| {
+                win.set_playlist_visible(true);
                 win.switch_mode(WindowMode::MainView);
             });
             klass.install_property_action("win.replaygain", "replaygain-mode");
@@ -293,6 +296,7 @@ mod imp {
                 lyrics_button: TemplateChild::default(),
                 fullscreen_view: TemplateChild::default(),
                 fullscreen_button: TemplateChild::default(),
+                content_stack: TemplateChild::default(),
                 split_view: TemplateChild::default(),
                 toast_overlay: TemplateChild::default(),
                 drag_overlay: TemplateChild::default(),
@@ -306,7 +310,7 @@ mod imp {
                 restore_playlist_button: TemplateChild::default(),
                 playlist_view: TemplateChild::default(),
                 playlist_shuffled: Cell::new(false),
-                playlist_visible: Cell::new(true),
+                playlist_visible: Cell::new(false),
                 playlist_selection: Cell::new(false),
                 playlist_search: Cell::new(false),
                 lyrics_visible: Cell::new(false),
@@ -594,7 +598,9 @@ impl Window {
 
     fn set_playlist_visible(&self, visible: bool) {
         if visible != self.imp().playlist_visible.replace(visible) {
-            self.imp().split_view.set_show_sidebar(visible);
+            self.imp()
+                .content_stack
+                .set_visible_child_name(if visible { "queue" } else { "home" });
             self.notify("playlist-visible");
         }
     }
@@ -1218,32 +1224,6 @@ impl Window {
     }
 
     fn connect_signals(&self) {
-        self.imp().split_view.connect_notify_local(
-            Some("collapsed"),
-            clone!(
-                #[weak(rename_to = win)]
-                self,
-                move |split_view, _| {
-                    win.set_playlist_visible(split_view.shows_sidebar());
-                    win.imp()
-                        .playlist_view
-                        .back_button()
-                        .set_visible(split_view.is_collapsed());
-                }
-            ),
-        );
-
-        self.imp().split_view.connect_notify_local(
-            Some("show-sidebar"),
-            clone!(
-                #[weak(rename_to = win)]
-                self,
-                move |split_view, _| {
-                    win.set_playlist_visible(split_view.shows_sidebar());
-                }
-            ),
-        );
-
         self.imp().waveform_view.connect_closure(
             "position-changed",
             false,
@@ -1841,9 +1821,7 @@ impl Window {
     fn setup_provider(&self) {
         let imp = self.imp();
         if let Some(display) = gdk::Display::default() {
-            // Above libadwaita's own sheet, which sits at 600; anything below
-            // that loses to the toolkit's accent colour.
-            gtk::style_context_add_provider_for_display(&display, &imp.provider, 800);
+            gtk::style_context_add_provider_for_display(&display, &imp.provider, 900);
 
             // style.css is picked up automatically from the resource base path;
             // the Octave sheet is not, so it needs its own provider. It sits
@@ -2041,7 +2019,8 @@ impl Window {
                 self.imp()
                     .octave_home
                     .populate(&crate::library_state::LibraryState::global().lock().unwrap());
-                stack.set_visible_child_name("home");
+                self.set_playlist_visible(false);
+                stack.set_visible_child_name("main-view");
             }
         };
     }

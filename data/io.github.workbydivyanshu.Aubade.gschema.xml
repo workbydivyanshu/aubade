@@ -13,7 +13,7 @@
 	    <default>300</default>
 	  </key>
 	  <key name="enable-recoloring" type="b">
-	    <default>true</default>
+	    <default>false</default>
 	  </key>
     <key name="replay-gain" enum="io.github.workbydivyanshu.Aubade.ReplayGainMode">
       <default>'off'</default>

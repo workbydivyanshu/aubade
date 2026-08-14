@@ -199,98 +199,134 @@ template $AubadeWindow: Adw.ApplicationWindow {
                 }
               }
 
-              Adw.OverlaySplitView split_view {
+              Box split_view {
+                orientation: vertical;
                 hexpand: true;
-                max-sidebar-width: 330;
-                sidebar-width-fraction: 0.4;
+                vexpand: true;
 
-                content: Adw.ToolbarView {
-                  [top]
-                  Adw.HeaderBar {
-                  show-title: false;
-
-                  [end]
-                  Button fullscreen_button {
-                    icon-name: "fullscreen-symbolic";
-                    tooltip-text: _("Full Screen");
-                    action-name: "win.fullscreen";
-                    valign: center;
-
-                    accessibility {
-                      label: C_("a11y", "Full screen");
-                    }
-                  }
-
-                  [start]
-                  Button home_button {
-                    icon-name: "view-queue-symbolic";
-                    tooltip-text: _("Library");
-                    action-name: "win.show-home";
-                    valign: center;
-                  }
-
-                  [end]
-                  ToggleButton lyrics_button {
-                    icon-name: "lyrics-symbolic";
-                    tooltip-text: _("Show Lyrics");
-                    action-name: "lyrics.toggle";
-                    valign: center;
-                    visible: false;
-
-                    accessibility {
-                      label: C_("a11y", "Show lyrics");
-                    }
-                  }
-                  }
-
-                  content: Box main_box {
-                  orientation: vertical;
-                  valign: center;
-                  vexpand: true;
-                  spacing: 6;
+                Box {
+                  orientation: horizontal;
+                  height-request: 56;
+                  spacing: 4;
+                  margin-start: 12;
+                  margin-end: 12;
 
                   styles [
-                    "main-box",
+                    "octave-topbar",
                   ]
 
-                  Stack cover_stack {
+                  Button {
+                    icon-name: "go-previous-symbolic";
+                    action-name: "win.leave-home";
+                    tooltip-text: _("Back");
+
+                    styles [
+                      "flat",
+                      "octave-icon-button",
+                    ]
+                  }
+
+                  Button {
+                    icon-name: "go-next-symbolic";
+                    action-name: "win.show-home";
+                    tooltip-text: _("Forward");
+
+                    styles [
+                      "flat",
+                      "octave-icon-button",
+                    ]
+                  }
+
+                  Box {
+                    hexpand: true;
+                  }
+                }
+
+                ScrolledWindow {
+                  hscrollbar-policy: never;
+                  vscrollbar-policy: automatic;
+                  hexpand: true;
+                  vexpand: true;
+
+                  child: Stack content_stack {
                     transition-type: crossfade;
 
                     StackPage {
-                      name: "cover";
+                      name: "home";
 
-                      child: $AubadeSongCover song_cover {};
+                      child: $AubadeOctaveHome octave_home {};
                     }
 
                     StackPage {
-                      name: "lyrics";
+                      name: "queue";
 
-                      child: $AubadeLyricsView lyrics_view {
-                        height-request: 280;
-                        width-request: 280;
-                      };
+                      child: $AubadePlaylistView playlist_view {};
+                    }
+                  };
+                }
+
+                Box {
+                  orientation: horizontal;
+                  height-request: 90;
+                  spacing: 18;
+                  margin-start: 16;
+                  margin-end: 16;
+                  margin-top: 10;
+                  margin-bottom: 10;
+
+                  styles [
+                    "octave-player-bar",
+                  ]
+
+                  Box {
+                    orientation: horizontal;
+                    valign: center;
+                    width-request: 270;
+                    spacing: 10;
+
+                    Stack cover_stack {
+                      valign: center;
+                      width-request: 56;
+                      height-request: 56;
+                      transition-type: crossfade;
+
+                      StackPage {
+                        name: "cover";
+
+                        child: $AubadeSongCover song_cover {};
+                      }
+
+                      StackPage {
+                        name: "lyrics";
+
+                        child: $AubadeLyricsView lyrics_view {
+                          width-request: 56;
+                          height-request: 56;
+                        };
+                      }
+                    }
+
+                    $AubadeSongDetails song_details {
+                      hexpand: true;
+                      valign: center;
                     }
                   }
 
                   Box {
                     orientation: vertical;
+                    valign: center;
+                    hexpand: true;
                     spacing: 2;
-                    width-request: 256;
 
-                    Box {
-                      halign: center;
-
-                      $AubadeWaveformView waveform_view {
-                        can-focus: "true";
-                      }
+                    $AubadePlaybackControl playback_control {
+                      hexpand: true;
+                      valign: center;
                     }
 
-                    CenterBox {
+                    Box {
                       orientation: horizontal;
-                      width-request: 256;
-                      halign: center;
+                      spacing: 8;
 
-                      [start]
                       Label elapsed_label {
                         label: "0:00";
 
@@ -304,7 +340,11 @@ template $AubadeWindow: Adw.ApplicationWindow {
                         ]
                       }
 
-                      [end]
+                      $AubadeWaveformView waveform_view {
+                        can-focus: "true";
+                        hexpand: true;
+                      }
+
                       Label remaining_label {
                         label: "0:00";
 
@@ -320,17 +360,43 @@ template $AubadeWindow: Adw.ApplicationWindow {
                     }
                   }
 
-                  $AubadeSongDetails song_details {}
+                  Box {
+                    orientation: horizontal;
+                    valign: center;
+                    spacing: 4;
 
-                  $AubadePlaybackControl playback_control {
-                    halign: "center";
-                    margin-top: "0";
-                    margin-bottom: "24";
+                    ToggleButton lyrics_button {
+                      icon-name: "lyrics-symbolic";
+                      tooltip-text: _("Show Lyrics");
+                      action-name: "lyrics.toggle";
+                      visible: false;
+
+                      styles [
+                        "flat",
+                        "octave-icon-button",
+                      ]
+
+                      accessibility {
+                        label: C_("a11y", "Show lyrics");
+                      }
+                    }
+
+                    Button fullscreen_button {
+                      icon-name: "fullscreen-symbolic";
+                      tooltip-text: _("Full Screen");
+                      action-name: "win.fullscreen";
+
+                      styles [
+                        "flat",
+                        "octave-icon-button",
+                      ]
+
+                      accessibility {
+                        label: C_("a11y", "Full screen");
+                      }
+                    }
                   }
-                  };
-                };
-
-                sidebar: $AubadePlaylistView playlist_view {};
+                }
               }
             };
           }
@@ -341,42 +407,9 @@ template $AubadeWindow: Adw.ApplicationWindow {
             child: $AubadeFullScreenView fullscreen_view {};
           }
 
-          StackPage {
-            name: "home";
-
-            child: Adw.ToolbarView {
-              [top]
-              Adw.HeaderBar {
-                show-title: false;
-
-                [start]
-                Button {
-                  icon-name: "go-previous-symbolic";
-                  tooltip-text: _("Back to the Queue");
-                  action-name: "win.leave-home";
-                  valign: center;
-                }
-              }
-
-              content: ScrolledWindow {
-                hscrollbar-policy: never;
-                vexpand: true;
-
-                child: $AubadeOctaveHome octave_home {};
-              };
-            };
-          }
-
         };
       };
     }
   };
 
-  Adw.Breakpoint {
-    condition ("max-width: 560sp")
-
-    setters {
-      split_view.collapsed: true;
-    }
-  }
 }
