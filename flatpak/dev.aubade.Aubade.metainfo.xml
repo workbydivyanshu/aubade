@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Aubade contributors -->
+<component type="desktop-application">
+  <id>dev.aubade.Aubade</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Aubade</name>
+  <summary>Local music player</summary>
+
+  <description>
+    <p>
+      Aubade is a music player for your own collection. It scans your music
+      folders, reads tags, and plays everything locally — no account, no
+      streaming service, no uploads.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Library of your local files, scanned incrementally and tagged with mutagen</li>
+      <li>Gapless playback with shuffle and repeat, powered by GStreamer</li>
+      <li>Cover art from embedded tags, folder images or subdirectories</li>
+      <li>Synchronised lyrics from embedded tags, .lrc sidecars and online sources</li>
+      <li>Media keys and GNOME control integration over MPRIS2</li>
+      <li>Plays statistics: top artists, albums and genres, recent plays</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">dev.aubade.Aubade.desktop</launchable>
+
+  <!-- TODO: add <url type="homepage">/type="bugtracker"> once the project has a
+       public repository; appstreamcli warns with url-homepage-missing until then. -->
+
+  <developer id="dev.aubade">
+    <name>Aubade contributors</name>
+  </developer>
+
+  <content_rating type="oars-1.1"/>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#7C4DFF</color>
+    <color type="primary" scheme_preference="dark">#B388FF</color>
+  </branding>
+
+  <releases>
+    <release version="0.2.0" date="2026-10-05">
+      <description>
+        <p>
+          Flatpak packaging, desktop entry and AppStream metadata, so Aubade can
+          be installed alongside the rest of the desktop.
+        </p>
+      </description>
+    </release>
+  </releases>
+</component>

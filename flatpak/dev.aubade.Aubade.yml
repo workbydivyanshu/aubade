@@ -1,0 +1,161 @@
+app-id: dev.aubade.Aubade
+runtime: org.gnome.Platform
+runtime-version: '51'
+sdk: org.gnome.Sdk
+command: aubade
+
+finish-args:
+  # --- display / rendering -------------------------------------------------
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+
+  # --- audio output --------------------------------------------------------
+  # GStreamer `playbin` resolves to autoaudiosink -> pipewiresink.
+  # --socket=pulseaudio exposes the PulseAudio/PipeWire-pulse socket that
+  # pipewiresink falls back to; the native pipewire-0 socket is added next so
+  # hosts running PipeWire natively get the real-time path.
+  - --socket=pulseaudio
+  - --filesystem=xdg-run/pipewire-0
+
+  # --- network (lyrics: lrclib.net, api.lyrics.ovh) ------------------------
+  - --share=network
+
+  # --- MPRIS2 (org.mpris.MediaPlayer2.aubade on the session bus) ------------
+  # --own-name publishes Aubade so GNOME Shell / media keys can see it.
+  - --own-name=org.mpris.MediaPlayer2.aubade
+  - --talk-name=org.mpris.MediaPlayer2
+
+  # --- library folders -----------------------------------------------------
+  # The app scans ~/Music on first launch and can be pointed at another folder
+  # with the GTK4 FileDialog (XDG document portal, no permission needed).
+  - --filesystem=xdg-music
+  - --filesystem=xdg-download
+
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /man
+  - /share/doc
+  - /share/gtk-doc
+  - /share/man
+  - /share/pkgconfig
+  - '*.a'
+  - '*.la'
+  - '*.backup'
+
+modules:
+  # ---------------------------------------------------------------------------
+  # The GNOME runtime already ships python3.14 plus PyGObject (gi, pycairo),
+  # Gtk-4 / Adw-1 / Gst-1 typelibs and the GStreamer plugin set (playbin,
+  # libav, flac, opus, vorbis, wavpack, pipewire sink), so only the two extras
+  # the app imports are installed here: mutagen for tags, Pillow for artwork
+  # thumbnails. Both land in /app/lib/python3.14/site-packages, which
+  # launcher.sh puts on PYTHONPATH.
+  #
+  # Wheels are unpacked rather than pip-installed because flatpak-builder
+  # sandboxes have no network access.
+  # ---------------------------------------------------------------------------
+  - name: mutagen
+    buildsystem: simple
+    # The wheel is fetched on the host (build sandboxes have no network) and
+    # unpacked here. Pure python, so one wheel covers every architecture.
+    build-commands:
+      - install -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - unzip -q -o mutagen-1.48.1-py3-none-any.whl
+        -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - rm -rf ${FLATPAK_DEST}/lib/python3.14/site-packages/mutagen-1.48.1.dist-info
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/47/d8/a29e4e3991765e7ce4ed1f7e4074fe1ba9da03e0048639734de60f9cadb9/mutagen-1.48.1-py3-none-any.whl
+        sha256: 4f077fe87d3fc7fba259aa63d8c026b18382ca6a42ef37c61e16f1b1b5b82fe7
+
+  # Pillow ships compiled wheels, so it needs one module per architecture, and
+  # the wheel tag tracks the runtime's Python minor version (cp314 on
+  # org.gnome.Platform//51). Bump the url and sha256 together when upgrading.
+  - name: pillow-x86_64
+    buildsystem: simple
+    only-arches: [x86_64]
+    build-commands:
+      - install -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - unzip -q -o pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - rm -rf ${FLATPAK_DEST}/lib/python3.14/site-packages/Pillow-12.3.0.dist-info
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/5c/44/c85361f65dbe00eea8576ee467c768d25129989efb76e94f205e9ca9bb46/pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 251bf95b67017e27b13d82f5b326234ca62d70f9cf4c2b9032de2358a3b12c7b
+
+  - name: pillow-aarch64
+    buildsystem: simple
+    only-arches: [aarch64]
+    build-commands:
+      - install -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - unzip -q -o pillow-12.3.0-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl
+        -d ${FLATPAK_DEST}/lib/python3.14/site-packages
+      - rm -rf ${FLATPAK_DEST}/lib/python3.14/site-packages/Pillow-12.3.0.dist-info
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/b1/9d/8b2c807dbef61a5197c047afe99823787eb66f63daf9fb2432f91d6f0462/pillow-12.3.0-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl
+        sha256: e9aeb04d6aef139de265b29683e119b638208f88cf73cdd1658aa07221165321
+
+  - name: aubade
+    buildsystem: simple
+    sources:
+      - type: dir
+        path: ..
+        skip:
+          - flatpak
+          - '**/__pycache__'
+          - '*.pyc'
+          - '*.backup'
+          - '*.log'
+      # The packaging files sit next to the manifest, not in the app tree.
+      - type: file
+        path: launcher.sh
+      - type: file
+        path: dev.aubade.Aubade.desktop
+      - type: file
+        path: dev.aubade.Aubade.metainfo.xml
+      # One dir source, not one file source per size: every icon has the same
+      # basename, so `dest: icons` three times over would have all of them
+      # written to icons/dev.aubade.Aubade.png and the last copy (512px) would
+      # be installed at every size below.
+      - type: dir
+        path: icons
+    build-commands:
+      # --- application tree ----------------------------------------------
+      - install -d ${FLATPAK_DEST}/share/aubade
+      - cp -r aubade ${FLATPAK_DEST}/share/aubade/aubade
+      # ui.py.backup is a stale 82 KB copy of ui.py; the package never reads it.
+      - rm -f ${FLATPAK_DEST}/share/aubade/aubade/*.backup
+      - install -Dm644 run.sh ${FLATPAK_DEST}/share/aubade/run.sh
+      # theme.css and assets/backdrop.jpg are loaded relative to the package
+      # dir at runtime, so they must travel with it.
+      - |
+        test -f ${FLATPAK_DEST}/share/aubade/aubade/theme.css
+        test -f ${FLATPAK_DEST}/share/aubade/aubade/assets/backdrop.jpg
+
+      # --- entry point ----------------------------------------------------
+      # launcher.sh wraps run.sh: same `python3 -m aubade`, plus the PYTHONPATH
+      # that points at the unpacked wheel dependencies.
+      - install -Dm755 launcher.sh ${FLATPAK_DEST}/bin/aubade
+
+      # --- desktop integration -------------------------------------------
+      - install -Dm644 dev.aubade.Aubade.desktop
+        ${FLATPAK_DEST}/share/applications/dev.aubade.Aubade.desktop
+      - install -Dm644 dev.aubade.Aubade.metainfo.xml
+        ${FLATPAK_DEST}/share/metainfo/dev.aubade.Aubade.metainfo.xml
+
+      # --- icons (already downscales of aubade/assets/logo.png) -----------
+      - |
+        for size in 128 256 512; do
+          install -d ${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps
+          install -Dm644 icons/${size}x${size}/dev.aubade.Aubade.png \
+            ${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/dev.aubade.Aubade.png
+        done
+
+      # /app is read-only at runtime, so precompile the bytecode cache.
+      - python3 -m compileall -q ${FLATPAK_DEST}/share/aubade/aubade

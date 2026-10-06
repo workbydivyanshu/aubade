@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Aubade
+GenericName=Music Player
+Comment=Play your local music library
+Keywords=music;player;audio;playlist;album;lyrics;mpris;
+Exec=aubade
+Icon=dev.aubade.Aubade
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Music;Player;
+StartupNotify=true
+StartupWMClass=dev.aubade.Aubade
+DBusActivatable=false
+X-GNOME-UsesNotifications=true
+X-Purism-FormFactor=Workstation;Mobile;
